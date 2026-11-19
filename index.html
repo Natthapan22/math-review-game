@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7c3aed">
+<title>เกมทบทวนคณิต 🌈</title>
+<style>
+:root{--pink:#ff5fa2;--purple:#7c3aed;--blue:#22b8f0;--green:#22c55e;--yellow:#ffd23f;--orange:#ff8a1f;--red:#ff4d6d;--ink:#2e1f4f;--card:#fff;
+ --r:24px;--shadow:0 10px 0 rgba(46,31,79,.18),0 18px 30px rgba(46,31,79,.18)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:"Mali","Kodchasan","Sarabun","Noto Sans Thai","Leelawadee UI","Thonburi",system-ui,sans-serif;color:var(--ink);
+ background:#6d5dfc;min-height:100vh;overflow-x:hidden}
+button{font:inherit;color:inherit}
+/* ---------- animated background ---------- */
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;background:#6d5dfc}
+.bg::before{content:"";position:absolute;inset:-60%;will-change:transform;
+ background:conic-gradient(from 0deg at 50% 50%,#ff7ac6,#ffb347,#ffe66d,#5ee7a8,#4fc3ff,#8b7bff,#ff7ac6);
+ animation:spin 40s linear infinite;opacity:.95}
+.bg::after{content:"";position:absolute;inset:0;
+ background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.55),transparent 40%),radial-gradient(circle at 85% 80%,rgba(255,255,255,.35),transparent 45%),
+ radial-gradient(rgba(255,255,255,.22) 2px,transparent 2.5px) 0 0/26px 26px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sym{position:absolute;bottom:-60px;font-weight:900;color:#fff;opacity:.55;text-shadow:0 3px 0 rgba(46,31,79,.18);
+ will-change:transform;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(18px,-55vh,0) rotate(180deg)}100%{transform:translate3d(-12px,-115vh,0) rotate(360deg)}}
+.wrap{max-width:640px;margin:0 auto;padding:12px 14px 40px;position:relative}
+/* ---------- mute button ---------- */
+.mute{position:fixed;top:10px;right:10px;z-index:20;width:46px;height:46px;border-radius:50%;border:3px solid #fff;background:#ffd23f;
+ box-shadow:0 4px 0 #c99400,0 6px 12px rgba(0,0,0,.2);cursor:pointer;display:grid;place-items:center;padding:0}
+.mute:active{transform:translateY(3px);box-shadow:0 1px 0 #c99400}
+.mute svg{width:26px;height:26px}
+.mute .off{display:none}.mute.muted .on{display:none}.mute.muted .off{display:block}.mute.muted{background:#e5e7eb;box-shadow:0 4px 0 #9ca3af}
+/* ---------- menu ---------- */
+.hero{text-align:center;padding:4px 50px 0;position:relative}
+.hero .mascot{width:112px;height:112px;margin:0 auto -6px;display:block}
+h1{font-size:1.75rem;margin:6px 0 2px;line-height:1.25}
+.hero h1{font-size:1.6rem;white-space:nowrap}
+.title{color:#fff;font-weight:900;letter-spacing:.5px;text-shadow:0 3px 0 #5b21b6,0 6px 0 rgba(46,31,79,.25);-webkit-text-stroke:1px rgba(91,33,182,.4)}
+.title .g{display:inline-block;color:#ffe66d}
+.sub{text-align:center;margin:4px auto 14px;font-size:.82rem!important;white-space:nowrap;max-width:100%;background:rgba(255,255,255,.92);display:table;padding:6px 14px;border-radius:999px;font-weight:700;font-size:.95rem;box-shadow:0 4px 0 rgba(46,31,79,.15)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.topic{--c1:#ff5fa2;--c2:#ff8fb8;--sh:#c2185b;position:relative;overflow:hidden;border:3px solid #fff;border-radius:26px;padding:12px 8px 10px;font-size:1.15rem;font-weight:800;color:#fff;cursor:pointer;
+ background:linear-gradient(160deg,var(--c2),var(--c1))!important;box-shadow:0 8px 0 var(--sh),0 14px 18px rgba(46,31,79,.25);
+ transition:transform .12s,box-shadow .12s;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.topic::after{content:"";position:absolute;left:10%;right:10%;top:6px;height:30%;border-radius:20px;background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0));pointer-events:none}
+.topic:active{transform:translateY(6px);box-shadow:0 2px 0 var(--sh),0 4px 8px rgba(46,31,79,.2)}
+.topic .ico{width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.15);margin-bottom:2px}
+.topic .ico svg{width:44px;height:44px}
+.topic small{font-weight:600;opacity:.97;font-size:.78rem;line-height:1.35;text-shadow:none}
+.topic .best{font-size:.85rem;margin-top:auto;background:rgba(0,0,0,.16);border-radius:999px;padding:1px 10px;text-shadow:none;letter-spacing:1px}
+.topic.mixed{grid-column:1/-1;min-height:96px;flex-direction:row;justify-content:center;gap:12px;text-align:left;
+ background:linear-gradient(90deg,#ff5fa2,#a855f7,#22b8f0,#22c55e,#ffb020)!important;background-size:200% 100%!important;animation:rainbow 6s linear infinite}
+.topic.mixed .txt{display:flex;flex-direction:column}
+.topic.mixed .best{margin:0 0 0 auto;align-self:center}
+@keyframes rainbow{to{background-position:200% 0}}
+.t-graph{--c1:#ff3d8b;--c2:#ff8fc0;--sh:#b8105a}
+.t-geo{--c1:#8b3dff;--c2:#b98bff;--sh:#5a1fb8}
+.t-int{--c1:#0ea5e9;--c2:#5fd3ff;--sh:#0369a1}
+.t-stat{--c1:#16b364;--c2:#6ee7a7;--sh:#0b7a43}
+.t-exp{--c1:#ff7a00;--c2:#ffb557;--sh:#b45309}
+.t-mixed{--sh:#6b21a8}
+.opts{display:flex;justify-content:center;gap:10px;margin:18px 0 10px;flex-wrap:wrap}
+.toggle{background:#fff;border:3px solid #fff;border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 #c4b5fd}
+.toggle:active{transform:translateY(3px);box-shadow:0 2px 0 #c4b5fd}
+.toggle.on{background:#ffe66d;box-shadow:0 5px 0 #e0a800}
+.foot{color:#fff;font-weight:700;text-shadow:0 2px 0 rgba(46,31,79,.35)}
+/* ---------- card ---------- */
+.card{background:var(--card);border-radius:28px;padding:16px;box-shadow:var(--shadow);margin-top:10px;border:4px solid #fff;position:relative}
+/* ---------- HUD ---------- */
+.hud{display:flex;align-items:center;gap:6px;font-weight:800;padding-right:52px}
+.pill{background:#fff;border-radius:999px;padding:7px 10px;box-shadow:0 4px 0 rgba(46,31,79,.2);font-size:.85rem;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;border:none}
+#homeBtn{cursor:pointer;background:#ffe66d;box-shadow:0 4px 0 #d4a300}
+#homeBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #d4a300}
+#hudTopic{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;display:block;text-align:center}
+.pill svg{width:18px;height:18px;flex:none}
+.streak{transition:transform .2s}
+.streak .flame{transform-origin:50% 100%}
+.streak.hot{background:linear-gradient(180deg,#ffd23f,#ff6a00);color:#fff;box-shadow:0 4px 0 #b43c00,0 0 14px rgba(255,120,0,.8);text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.streak.hot .flame{animation:flick .35s ease-in-out infinite alternate}
+.streak.blaze{transform:scale(1.12)}
+@keyframes flick{0%{transform:scale(1,1) rotate(-4deg)}100%{transform:scale(1.15,1.25) rotate(4deg)}}
+/* ---------- map progress ---------- */
+.map{position:relative;height:58px;margin:12px 4px 4px}
+.road{position:absolute;left:14px;right:30px;top:30px;height:16px;border-radius:99px;background:#fff;box-shadow:0 4px 0 rgba(46,31,79,.2);overflow:hidden}
+.road::before{content:"";position:absolute;left:6px;right:6px;top:7px;border-top:3px dashed #d8ccff}
+.bar>div,#prog{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#ffd23f,#ff8a1f,#ff4d8b);transition:width .45s cubic-bezier(.3,1.4,.5,1);border-radius:99px}
+.mile{position:absolute;top:33px;width:10px;height:10px;border-radius:50%;background:#c4b5fd;border:2px solid #fff;transform:translateX(-50%)}
+.mile.done{background:#ffd23f}
+.goal{position:absolute;right:0;top:4px;width:40px;height:46px}
+.pin{position:absolute;left:14px;top:-2px;width:40px;height:40px;transform:translateX(-50%);transition:left .45s cubic-bezier(.3,1.4,.5,1)}
+.pin svg{width:40px;height:40px;animation:hop 1s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+/* ---------- question ---------- */
+.qhead{display:flex;align-items:center;gap:10px;margin:-4px 0 6px}
+.qhead .mascot{width:70px;height:70px;flex:none}
+.bubble{position:relative;background:#f3edff;border:3px solid #ddd0ff;border-radius:18px;padding:6px 10px;flex:1;min-width:0}
+.bubble::before{content:"";position:absolute;left:-10px;top:50%;margin-top:-8px;border:8px solid transparent;border-right-color:#ddd0ff;border-left:0}
+.bubble .say{font-weight:800;font-size:.95rem;line-height:1.4}
+.qmeta{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#qnum{font-weight:800;font-size:.8rem;background:#7c3aed;color:#fff;border-radius:99px;padding:2px 9px;opacity:1}
+.qtype{display:inline-block;font-size:.8rem;background:#ffe66d;border-radius:99px;padding:2px 9px;font-weight:700}
+.q{font-size:1.28rem;line-height:1.65;margin:6px 0 10px;font-weight:600}
+.fig{display:flex;justify-content:center;margin:6px 0 10px;background:#fbfaff;border:2px dashed #e4dcff;border-radius:18px;padding:8px}
+.fig svg{max-width:100%;height:auto}
+.choices{display:grid;gap:12px}
+.choice{position:relative;font-size:1.15rem;font-weight:700;padding:12px 14px 12px 58px;border-radius:20px;border:3px solid #e2d8ff;background:#fff;cursor:pointer;text-align:left;min-height:60px;color:var(--ink);
+ box-shadow:0 6px 0 #cbbcff;transition:transform .08s,box-shadow .08s,background .15s;line-height:1.4}
+.choice:active:not(:disabled){transform:translateY(5px);box-shadow:0 1px 0 #cbbcff}
+.choice .lt{position:absolute;left:10px;top:50%;margin-top:-18px;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:1.05rem;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.l0{background:#ff4d8b}.l1{background:#22b8f0}.l2{background:#ffb020}.l3{background:#22c55e}
+.choice.correct{background:#dcfce7;border-color:#22c55e;box-shadow:0 6px 0 #16a34a;animation:glow 1s ease-in-out 2}
+.choice.wrong{background:#ffe4e9;border-color:#ff4d6d;box-shadow:0 6px 0 #e11d48}
+.choice.correct::after,.choice.wrong::after{position:absolute;right:12px;top:50%;margin-top:-15px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:1.05rem}
+.choice.correct::after{content:"✓";background:#22c55e}
+.choice.wrong::after{content:"✗";background:#ff4d6d}
+@keyframes glow{50%{transform:scale(1.03)}}
+.choice:disabled{cursor:default}
+.choice:disabled:not(.correct):not(.wrong){opacity:.6}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tfrow .choice{text-align:center;font-size:1.45rem;font-weight:900;padding:16px 8px;min-height:78px}
+.tfrow .choice[data-v="true"]{background:#ecfdf3;border-color:#86efac;box-shadow:0 6px 0 #4ade80}
+.tfrow .choice[data-v="false"]{background:#fff1f3;border-color:#fda4af;box-shadow:0 6px 0 #fb7185}
+.tfrow .choice.correct{background:#bbf7d0;border-color:#22c55e;box-shadow:0 6px 0 #16a34a}
+.tfrow .choice.wrong{background:#fecdd3;border-color:#ff4d6d;box-shadow:0 6px 0 #e11d48}
+.ansbox{font-size:1.9rem;font-weight:900;text-align:center;border:4px solid #c4b5fd;border-radius:18px;padding:8px;min-height:62px;background:#f8f5ff;letter-spacing:1px;box-shadow:inset 0 4px 0 rgba(124,58,237,.08)}
+.ansbox.correct{background:#dcfce7;border-color:var(--green)}.ansbox.wrong{background:#ffe4e9;border-color:var(--red)}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}
+.key{font-size:1.5rem;font-weight:900;padding:11px 0;border-radius:16px;border:3px solid #fff;background:#e0f4ff;color:var(--ink);box-shadow:0 5px 0 #8fd3f5;cursor:pointer;transition:transform .07s,box-shadow .07s}
+.key:active{transform:translateY(4px);box-shadow:0 1px 0 #8fd3f5}
+.key.ok{background:#22c55e;color:#fff;box-shadow:0 5px 0 #15803d;grid-column:span 2;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.key.del{background:#ffe66d;box-shadow:0 5px 0 #d4a300}
+.key.neg{background:#ffc7e0;box-shadow:0 5px 0 #f472b6}
+.fb{margin-top:14px;border-radius:20px;padding:12px 14px;font-size:1.03rem;line-height:1.6;display:none;position:relative}
+.fb.show{display:block;animation:slideIn .3s ease-out}
+.fb.good{background:#ecfdf3;border:3px solid #86efac}
+.fb.bad{background:#fff1f3;border:3px solid #fda4af}
+.fb b{font-size:1.15rem}
+.fb.good>b:first-child{color:#15803d}.fb.bad>b:first-child{color:#e11d48}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.big{display:block;width:100%;font-size:1.25rem;font-weight:900;border:3px solid rgba(255,255,255,.7);border-radius:20px;padding:13px;margin-top:14px;color:#fff;background:linear-gradient(180deg,#9b6bff,#7c3aed);box-shadow:0 7px 0 #4c1d95,0 12px 16px rgba(46,31,79,.25);cursor:pointer;text-shadow:0 2px 0 rgba(0,0,0,.2);transition:transform .08s,box-shadow .08s}
+.big:active{transform:translateY(5px);box-shadow:0 2px 0 #4c1d95}
+.big.alt{background:linear-gradient(180deg,#ffa94d,#ff7a00);box-shadow:0 7px 0 #b45309,0 12px 16px rgba(46,31,79,.25)}
+.big.alt:active{box-shadow:0 2px 0 #b45309}
+.big.ghost{background:#fff;color:var(--purple);border:3px solid #ddd0ff;box-shadow:0 7px 0 #cbbcff;text-shadow:none}
+.big.ghost:active{box-shadow:0 2px 0 #cbbcff}
+#nextBtn{background:linear-gradient(180deg,#4ade80,#16a34a);box-shadow:0 7px 0 #166534,0 12px 16px rgba(46,31,79,.2)}
+#nextBtn:active{box-shadow:0 2px 0 #166534}
+/* ---------- result ---------- */
+.res{padding-top:10px;overflow:hidden}
+.rays{position:absolute;left:50%;top:92px;width:520px;height:520px;margin:-260px 0 0 -260px;pointer-events:none;opacity:.5;
+ background:repeating-conic-gradient(#fff3b0 0 10deg,transparent 10deg 20deg);border-radius:50%;-webkit-mask:radial-gradient(circle,#000 20%,transparent 65%);mask:radial-gradient(circle,#000 20%,transparent 65%);animation:spin 18s linear infinite}
+.trophy{width:132px;height:132px;display:block;margin:0 auto;position:relative;animation:trophyIn .7s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes trophyIn{from{transform:scale(.2) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
+.stars{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:4px 0 2px;position:relative;min-height:64px}
+.stars svg{width:54px;height:54px;animation:starIn .5s cubic-bezier(.3,1.8,.5,1) both}
+.stars svg:nth-child(2){width:66px;height:66px;margin-bottom:8px}
+.stars svg:nth-child(1){animation-delay:.35s}.stars svg:nth-child(2){animation-delay:.6s}.stars svg:nth-child(3){animation-delay:.85s}
+@keyframes starIn{from{transform:scale(0) rotate(-90deg)}to{transform:none}}
+.badge{display:inline-flex;align-items:center;gap:8px;margin:6px auto 2px;padding:6px 16px 6px 8px;border-radius:999px;color:#fff;font-weight:900;box-shadow:0 5px 0 rgba(0,0,0,.2);position:relative;animation:starIn .5s 1s both}
+.badge svg{width:34px;height:34px}
+.b3{background:linear-gradient(90deg,#f59e0b,#ef4444)}.b2{background:linear-gradient(90deg,#8b5cf6,#ec4899)}.b1{background:linear-gradient(90deg,#0ea5e9,#22c55e)}.b0{background:linear-gradient(90deg,#64748b,#8b5cf6)}
+#resTitle{color:#7c3aed;position:relative;text-shadow:0 3px 0 #ede4ff}
+.scorebig{font-size:1.4rem;margin:6px 0;font-weight:900;position:relative}
+.res .small,#resWrong{position:relative}
+.res .mascot{width:76px;height:76px;position:absolute;left:6px;top:10px}
+.center{text-align:center}
+.small{font-size:.9rem;opacity:.8}
+.hidden{display:none!important}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.85em;line-height:1.1;margin:0 2px}
+.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 3px}
+.ovr{display:inline-block;position:relative;padding-top:.45em;line-height:1}
+.ovr::before{content:attr(data-s);position:absolute;top:-.25em;left:0;right:0;text-align:center;font-size:.8em;letter-spacing:-1px}
+sup{font-size:.7em}
+.pop{animation:pop .4s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
+.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px) rotate(-1deg)}40%{transform:translateX(9px) rotate(1deg)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.flash{position:fixed;inset:0;pointer-events:none;z-index:8;opacity:0;animation:flash .5s ease-out}
+.flash.good{background:radial-gradient(circle,rgba(134,239,172,.0) 40%,rgba(34,197,94,.35))}
+.flash.bad{background:radial-gradient(circle,rgba(255,77,109,0) 40%,rgba(255,77,109,.4))}
+@keyframes flash{0%{opacity:1}100%{opacity:0}}
+/* particles (class confetti kept for compatibility) */
+.confetti{position:fixed;left:0;top:0;width:12px;height:12px;pointer-events:none;z-index:9;will-change:transform,opacity;border-radius:3px}
+.confetti.burst{animation:burst 1s cubic-bezier(.15,.8,.35,1) forwards}
+.confetti.rain{top:-20px;animation:fall 2s linear forwards}
+.confetti.star{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);width:18px;height:18px;border-radius:0}
+.confetti.dot{border-radius:50%}
+@keyframes burst{0%{transform:translate3d(var(--x0),var(--y0),0) scale(.4) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate3d(calc(var(--x0) + var(--dx)),calc(var(--y0) + var(--dy)),0) scale(1) rotate(var(--rot));opacity:0}}
+@keyframes fall{0%{transform:translate3d(var(--x0),0,0) rotate(0)}100%{transform:translate3d(calc(var(--x0) + var(--dx)),110vh,0) rotate(var(--rot));opacity:.7}}
+.bigstar{position:fixed;left:50%;top:40%;width:120px;height:120px;margin:-60px 0 0 -60px;pointer-events:none;z-index:9;animation:bigstar .9s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes bigstar{0%{transform:scale(0) rotate(-60deg);opacity:1}45%{transform:scale(1.1) rotate(8deg);opacity:1}100%{transform:scale(1.4) translateY(-60px);opacity:0}}
+.ember{position:fixed;left:0;top:0;width:14px;height:20px;pointer-events:none;z-index:9;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff59d,#ffb300 45%,#ff5722 80%);
+ will-change:transform,opacity;animation:ember 1.1s ease-out forwards}
+@keyframes ember{0%{transform:translate3d(var(--x0),var(--y0),0) scale(1);opacity:1}100%{transform:translate3d(calc(var(--x0) + var(--dx)),calc(var(--y0) - 140px),0) scale(.2);opacity:0}}
+.reviewlist{text-align:left;font-size:.95rem;line-height:1.5;padding-left:18px}
+/* ---------- mascot expressions ---------- */
+.mascot .e-happy,.mascot .e-sad{display:none}
+.mascot.happy .e-neutral,.mascot.sad .e-neutral{display:none}
+.mascot.happy .e-happy{display:inline}
+.mascot.sad .e-sad{display:inline}
+.mascot{overflow:visible}
+.mascot .body{transform-origin:60px 110px;animation:breathe 2.4s ease-in-out infinite}
+.mascot.happy .body{animation:jump .5s cubic-bezier(.3,1.5,.5,1) 2}
+.mascot.sad .body{animation:droop .6s ease-out forwards}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.03,.97)}}
+@keyframes jump{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-12px) scale(.95,1.06)}}
+@keyframes droop{to{transform:translateY(3px) scale(1.04,.94) rotate(-4deg)}}
+.mascot .blink{transform-origin:60px 58px;animation:blink 4s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@media (max-width:360px){.topic{min-height:140px;font-size:1.05rem}.q{font-size:1.18rem}h1{font-size:1.5rem}}
+@media (prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+ .sym,.bg::before{animation:none!important}
+ .confetti,.ember,.bigstar{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+ <span class="sym" style="left:4%;font-size:34px;animation-duration:19s;animation-delay:-2s">+</span>
+ <span class="sym" style="left:14%;font-size:28px;animation-duration:23s;animation-delay:-11s">÷</span>
+ <span class="sym" style="left:25%;font-size:40px;animation-duration:21s;animation-delay:-6s">π</span>
+ <span class="sym" style="left:36%;font-size:26px;animation-duration:25s;animation-delay:-16s">×</span>
+ <span class="sym" style="left:47%;font-size:36px;animation-duration:20s;animation-delay:-9s">√</span>
+ <span class="sym" style="left:58%;font-size:30px;animation-duration:24s;animation-delay:-3s">=</span>
+ <span class="sym" style="left:68%;font-size:38px;animation-duration:22s;animation-delay:-14s">−</span>
+ <span class="sym" style="left:78%;font-size:28px;animation-duration:26s;animation-delay:-7s">%</span>
+ <span class="sym" style="left:88%;font-size:34px;animation-duration:20s;animation-delay:-18s">x²</span>
+ <span class="sym" style="left:9%;font-size:24px;animation-duration:27s;animation-delay:-20s">∠</span>
+ <span class="sym" style="left:52%;font-size:24px;animation-duration:28s;animation-delay:-24s">½</span>
+ <span class="sym" style="left:93%;font-size:26px;animation-duration:24s;animation-delay:-10s">△</span>
+</div>
+<button class="mute" id="muteBtn" aria-label="เปิด/ปิดเสียง" title="เปิด/ปิดเสียง">
+ <svg class="on" viewBox="0 0 24 24" fill="none" stroke="#2e1f4f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+ <svg class="off" viewBox="0 0 24 24" fill="none" stroke="#2e1f4f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
+</button>
+<div class="wrap">
+
+<!-- MENU -->
+<section id="menu">
+  <div class="hero">
+    <svg class="mascot happy" id="menuMascot" viewBox="0 0 120 120"></svg>
+    <h1 class="title">เกมทบทวน<span class="g">คณิต</span></h1>
+  </div>
+  <p class="sub">เลือกเรื่องที่อยากทบทวน แล้วไปเก็บดาวกันเลย! ⭐</p>
+  <div class="grid" id="topicGrid"></div>
+  <div class="opts">
+  </div>
+  <p class="center small foot">สรุปจากชีทของครู: กราฟ • เรขาคณิต • จำนวนเต็ม • สถิติ • เลขยกกำลัง</p>
+</section>
+
+<!-- GAME -->
+<section id="game" class="hidden">
+  <div class="hud">
+    <button class="pill" id="homeBtn">🏠 เมนู</button>
+    <span class="pill" id="hudTopic"></span>
+    <span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="#ffd23f" stroke="#e0a800" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="hudScore">0</span></span>
+    <span class="pill streak" id="hudStreakPill"><svg viewBox="0 0 24 24"><path class="flame" d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-3 1.5-4.5 2.5-6 .3 2 1 3 2 3.5C11 8 11 5 12 2z" fill="#ff6a00" stroke="#c2410c" stroke-width="1.2"/><path class="flame" d="M12 12c.8 1.6 2.5 2.2 2.5 4a2.5 2.5 0 0 1-5 0c0-1.2.9-2 1.4-2.8.3.8.6 1.1 1.1 1.3z" fill="#ffe066"/></svg><span id="hudStreak">0</span></span>
+    <span class="pill hidden" id="hudTimerWrap">⏱️ <span id="hudTimer">0</span></span>
+  </div>
+  <div class="map" aria-hidden="true">
+    <div class="road bar"><div id="prog"></div></div>
+    <div id="miles"></div>
+    <svg class="goal" viewBox="0 0 40 46"><rect x="6" y="4" width="3" height="40" rx="1.5" fill="#2e1f4f"/><path d="M9 5h24l-5 7 5 7H9z" fill="#fff" stroke="#2e1f4f" stroke-width="2"/><path d="M13 5h5v5h-5zM23 5h5v5h-5zM18 10h5v5h-5zM28 12l5 7h-5zM13 15h5v4h-5z" fill="#2e1f4f"/><ellipse cx="8" cy="44" rx="7" ry="2" fill="rgba(46,31,79,.3)"/></svg>
+    <div class="pin" id="pin"><svg viewBox="0 0 40 40"><path d="M20 38s-12-12-12-21a12 12 0 0 1 24 0c0 9-12 21-12 21z" fill="#ff4d8b" stroke="#fff" stroke-width="3"/><circle cx="20" cy="17" r="6.5" fill="#fff"/><path d="M20 12.5l1.5 3 3.2.4-2.4 2.2.7 3.2L20 19.7l-3 1.6.7-3.2-2.4-2.2 3.2-.4z" fill="#ffd23f"/></svg></div>
+  </div>
+  <div class="card" id="qcard">
+    <div class="qhead">
+      <svg class="mascot" id="gameMascot" viewBox="0 0 120 120"></svg>
+      <div class="bubble">
+        <div class="qmeta"><span id="qnum"></span><span class="qtype" id="qtype"></span></div>
+        <div class="say" id="say">สู้ ๆ นะ! คิดดี ๆ ก่อนตอบ</div>
+      </div>
+    </div>
+    <div class="q" id="qtext"></div>
+    <div class="fig" id="qfig"></div>
+    <div id="qinput"></div>
+    <div class="fb" id="fb"></div>
+    <button class="big hidden" id="nextBtn">ข้อต่อไป ➜</button>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="hidden">
+  <div class="card center res">
+    <div class="rays"></div>
+    <svg class="mascot happy" id="resMascot" viewBox="0 0 120 120"></svg>
+    <svg class="trophy" viewBox="0 0 120 120" aria-hidden="true">
+      <ellipse cx="60" cy="112" rx="34" ry="5" fill="rgba(46,31,79,.18)"/>
+      <path d="M30 22H14c0 22 10 32 22 34M90 22h16c0 22-10 32-22 34" fill="none" stroke="#e0a800" stroke-width="7" stroke-linecap="round"/>
+      <path d="M28 14h64v20c0 22-14 36-32 36S28 56 28 34z" fill="url(#gold)" stroke="#b77900" stroke-width="3"/>
+      <path d="M38 20v14c0 10 5 19 13 24" fill="none" stroke="#fff6c2" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+      <rect x="52" y="68" width="16" height="16" fill="#e0a800" stroke="#b77900" stroke-width="3"/>
+      <path d="M36 98c0-8 10-14 24-14s24 6 24 14v8H36z" fill="url(#gold)" stroke="#b77900" stroke-width="3"/>
+      <rect x="44" y="94" width="32" height="8" rx="3" fill="#7c3aed"/>
+      <path d="M60 28l3.5 7.2 7.9 1.1-5.7 5.6 1.3 7.9L60 46l-7 3.8 1.3-7.9-5.7-5.6 7.9-1.1z" fill="#fff"/>
+      <circle cx="96" cy="12" r="3" fill="#fff"/><circle cx="20" cy="70" r="2.5" fill="#fff"/><path d="M104 54l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#fff"/>
+    </svg>
+    <h1 id="resTitle">เก่งมาก!</h1>
+    <div class="stars" id="resStars"></div>
+    <div id="resBadge"></div>
+    <p class="scorebig" id="resScore"></p>
+    <p id="resExtra" class="small"></p>
+    <div id="resWrong"></div>
+    <button class="big alt" id="retryWrongBtn">🔁 ฝึกข้อที่ผิดอีกรอบ</button>
+    <button class="big" id="againBtn">🎲 เล่นเรื่องนี้ใหม่ (สุ่มลำดับ)</button>
+    <button class="big ghost" id="menuBtn">🏠 กลับเมนู</button>
+  </div>
+</section>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff07a"/><stop offset=".5" stop-color="#ffcf2e"/><stop offset="1" stop-color="#f0a500"/></linearGradient>
+ <linearGradient id="mbody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ee8ff"/><stop offset="1" stop-color="#3aa8ff"/></linearGradient>
+</defs></svg>
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const M = "−"; // proper minus sign
+const fr = (a,b)=>`<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const line = s=>`<span class="ovr" data-s="⟷">${s}</span>`;
+const seg  = s=>`<span class="ovr" data-s="—">${s}</span>`;
+const ray  = s=>`<span class="ovr" data-s="⟶">${s}</span>`;
+function svgWrap(w,h,inner){return `<svg viewBox="0 0 ${w} ${h}" width="${w}" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">${inner}</svg>`;}
+
+// coordinate plane -5..5 with points [{x,y,label,color}]
+function plane(points, opts={}){
+  const s=24, o=150, W=300;
+  let g='';
+  for(let i=-5;i<=5;i++){ g+=`<line x1="${o+i*s}" y1="${o-5*s}" x2="${o+i*s}" y2="${o+5*s}" stroke="#e5e7eb"/><line x1="${o-5*s}" y1="${o+i*s}" x2="${o+5*s}" y2="${o+i*s}" stroke="#e5e7eb"/>`;
+    if(i!==0){g+=`<text x="${o+i*s}" y="${o+15}" font-size="10" text-anchor="middle" fill="#666">${i<0?M+(-i):i}</text><text x="${o-6}" y="${o-i*s+4}" font-size="10" text-anchor="end" fill="#666">${i<0?M+(-i):i}</text>`;}
+  }
+  g+=`<line x1="${o-5.6*s}" y1="${o}" x2="${o+5.6*s}" y2="${o}" stroke="#16a34a" stroke-width="2.5" marker-end="url(#ax)" marker-start="url(#ax)"/>`;
+  g+=`<line x1="${o}" y1="${o+5.6*s}" x2="${o}" y2="${o-5.6*s}" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ay)" marker-start="url(#ay)"/>`;
+  g+=`<text x="${o+5.7*s}" y="${o-6}" font-size="16" fill="#16a34a" font-weight="bold">X</text><text x="${o+8}" y="${o-5.6*s+4}" font-size="16" fill="#2563eb" font-weight="bold">Y</text>`;
+  if(opts.quads){ g+=`<text x="${o+2.5*s}" y="${o-3*s}" font-size="13" fill="#d97706" text-anchor="middle">จตุภาคที่ 1</text><text x="${o-2.5*s}" y="${o-3*s}" font-size="13" fill="#d97706" text-anchor="middle">จตุภาคที่ 2</text><text x="${o-2.5*s}" y="${o+3*s}" font-size="13" fill="#d97706" text-anchor="middle">จตุภาคที่ 3</text><text x="${o+2.5*s}" y="${o+3*s}" font-size="13" fill="#d97706" text-anchor="middle">จตุภาคที่ 4</text>`;}
+  for(const p of points){ g+=`<circle cx="${o+p.x*s}" cy="${o-p.y*s}" r="6" fill="${p.color||'#ec4899'}" stroke="#fff" stroke-width="2"/>`; if(p.label) g+=`<text x="${o+p.x*s+8}" y="${o-p.y*s-8}" font-size="15" font-weight="bold" fill="${p.color||'#ec4899'}">${p.label}</text>`;}
+  const defs=`<defs><marker id="ax" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#16a34a"/></marker><marker id="ay" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#2563eb"/></marker></defs>`;
+  return svgWrap(W,W,defs+g);
+}
+// line / segment / ray figures
+function lineFig(kind){
+  const defs=`<defs><marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#7c3aed"/></marker></defs>`;
+  let g='';
+  if(kind==='line') g=`<line x1="20" y1="45" x2="260" y2="45" stroke="#7c3aed" stroke-width="5" marker-start="url(#ar)" marker-end="url(#ar)"/><circle cx="90" cy="45" r="6" fill="#ec4899"/><circle cx="190" cy="45" r="6" fill="#ec4899"/><text x="84" y="28" font-size="18" font-weight="bold">A</text><text x="184" y="28" font-size="18" font-weight="bold">B</text>`;
+  if(kind==='seg') g=`<line x1="60" y1="45" x2="220" y2="45" stroke="#7c3aed" stroke-width="5"/><circle cx="60" cy="45" r="8" fill="#ec4899"/><circle cx="220" cy="45" r="8" fill="#ec4899"/><text x="54" y="26" font-size="18" font-weight="bold">A</text><text x="214" y="26" font-size="18" font-weight="bold">B</text>`;
+  if(kind==='ray') g=`<line x1="220" y1="45" x2="30" y2="45" stroke="#7c3aed" stroke-width="5" marker-end="url(#ar)"/><circle cx="220" cy="45" r="8" fill="#ec4899"/><circle cx="90" cy="45" r="6" fill="#ec4899"/><text x="84" y="26" font-size="18" font-weight="bold">A</text><text x="214" y="26" font-size="18" font-weight="bold">B</text>`;
+  return svgWrap(280,70,defs+g);
+}
+// angle figure from the summary: A up, C right, E left, D down, B at 40° from OC
+function angleFig(){
+  const o=[150,140], L=110, rad=40*Math.PI/180;
+  const bx=o[0]+L*Math.cos(rad), by=o[1]-L*Math.sin(rad);
+  const defs=`<defs><marker id="aa" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="#1d4ed8"/></marker></defs>`;
+  let g=`<line x1="${o[0]}" y1="${o[1]}" x2="${o[0]}" y2="20" stroke="#1d4ed8" stroke-width="3" marker-end="url(#aa)"/>
+  <line x1="${o[0]}" y1="${o[1]}" x2="${o[0]}" y2="260" stroke="#1d4ed8" stroke-width="3" marker-end="url(#aa)"/>
+  <line x1="${o[0]}" y1="${o[1]}" x2="280" y2="${o[1]}" stroke="#1d4ed8" stroke-width="3" marker-end="url(#aa)"/>
+  <line x1="${o[0]}" y1="${o[1]}" x2="20" y2="${o[1]}" stroke="#1d4ed8" stroke-width="3" marker-end="url(#aa)"/>
+  <line x1="${o[0]}" y1="${o[1]}" x2="${bx}" y2="${by}" stroke="#db2777" stroke-width="3" marker-end="url(#aa)"/>
+  <path d="M ${o[0]+45} ${o[1]} A 45 45 0 0 0 ${o[0]+45*Math.cos(rad)} ${o[1]-45*Math.sin(rad)}" fill="none" stroke="#db2777" stroke-width="2"/>
+  <text x="${o[0]+50}" y="${o[1]-10}" font-size="15" fill="#db2777" font-weight="bold">40°</text>
+  <rect x="${o[0]-14}" y="${o[1]-14}" width="14" height="14" fill="none" stroke="#1d4ed8"/>
+  <text x="${o[0]+8}" y="22" font-size="18" font-weight="bold">A</text><text x="${bx+4}" y="${by-4}" font-size="18" font-weight="bold" fill="#db2777">B</text>
+  <text x="270" y="${o[1]-8}" font-size="18" font-weight="bold">C</text><text x="18" y="${o[1]-8}" font-size="18" font-weight="bold">E</text>
+  <text x="${o[0]+8}" y="262" font-size="18" font-weight="bold">D</text><text x="${o[0]-18}" y="${o[1]+20}" font-size="18" font-weight="bold">O</text>`;
+  return svgWrap(300,275,defs+g);
+}
+function pictoFig(){
+  const rows=[["ส้ม","🍊",4],["แอปเปิล","🍎",7],["กล้วย","🍌",5],["แตงโม","🍉",1]];
+  let g=`<text x="150" y="20" font-size="15" text-anchor="middle" font-weight="bold" fill="#ea580c">ปริมาณผลไม้ที่ขายให้ร้านค้า</text>`;
+  rows.forEach((r,i)=>{const y=34+i*38; g+=`<rect x="5" y="${y}" width="80" height="32" rx="6" fill="#e5e7eb"/><text x="45" y="${y+22}" font-size="15" text-anchor="middle">${r[0]}</text><rect x="90" y="${y}" width="215" height="32" rx="6" fill="#f3f4f6"/>`;
+    for(let k=0;k<r[2];k++) g+=`<text x="${96+k*29}" y="${y+24}" font-size="22">${r[1]}</text>`;});
+  g+=`<text x="155" y="${34+4*38+14}" font-size="13" text-anchor="middle" fill="#ea580c">มาตราส่วน: ผลไม้ 1 รูป แทน 2 กิโลกรัม</text>`;
+  return svgWrap(310,200,g);
+}
+function barFig(){
+  const data=[["แอปเปิล",[800,600,40]],["ส้ม",[600,700,90]],["กล้วย",[50,550,150]]];
+  const cols=["#4f81bd","#c0504d","#9bbb59"], H=180, base=200, sc=H/900;
+  let g='';
+  for(let v=0;v<=900;v+=300){const y=base-v*sc; g+=`<line x1="40" y1="${y}" x2="300" y2="${y}" stroke="#e5e7eb"/><text x="35" y="${y+4}" font-size="10" text-anchor="end">${v}</text>`;}
+  data.forEach((d,i)=>{const x0=55+i*85; d[1].forEach((v,j)=>{g+=`<rect x="${x0+j*20}" y="${base-v*sc}" width="18" height="${v*sc}" fill="${cols[j]}"/>`;}); g+=`<text x="${x0+29}" y="${base+16}" font-size="13" text-anchor="middle">${d[0]}</text>`;});
+  ["2013","2014","2015"].forEach((t,j)=>{g+=`<rect x="${90+j*65}" y="230" width="12" height="12" fill="${cols[j]}"/><text x="${106+j*65}" y="241" font-size="12">${t}</text>`;});
+  return svgWrap(310,250,g);
+}
+function pieFig(){
+  const data=[["กาแฟ",38,"#70ad47"],["ชา",36,"#4472c4"],["โดนัท",11,"#ffc000"],["ขนมอบ",10,"#c5e0b4"],["น้ำผลไม้",5,"#b4c7e7"]];
+  const cx=100,cy=105,r=85; let a=-Math.PI/2, g=`<text x="150" y="16" font-size="14" text-anchor="middle" font-weight="bold">ยอดขายช่วงเช้า (ทั้งหมด 100 คน)</text>`;
+  data.forEach(d=>{const b=a+d[1]/100*2*Math.PI; const large=(b-a)>Math.PI?1:0;
+    g+=`<path d="M${cx},${cy} L${cx+r*Math.cos(a)},${cy+r*Math.sin(a)} A${r},${r} 0 ${large} 1 ${cx+r*Math.cos(b)},${cy+r*Math.sin(b)} Z" fill="${d[2]}" stroke="#fff" stroke-width="2"/>`;
+    const m=(a+b)/2; g+=`<text x="${cx+r*.62*Math.cos(m)}" y="${cy+r*.62*Math.sin(m)+4}" font-size="11" text-anchor="middle" font-weight="bold">${d[1]}%</text>`; a=b;});
+  data.forEach((d,i)=>{g+=`<rect x="200" y="${45+i*24}" width="14" height="14" fill="${d[2]}"/><text x="220" y="${57+i*24}" font-size="13">${d[0]}</text>`;});
+  return svgWrap(310,200,g);
+}
+function tableFig(rows){
+  let h='<table style="border-collapse:separate;border-spacing:3px;font-size:.95rem;margin:auto">';
+  rows.forEach((r,i)=>{h+='<tr>'+r.map((c,j)=>`<td style="padding:5px 7px;border-radius:10px;text-align:center;background:${j===0?(i===0?'#fbcfe8':'#bbf7d0'):'#f5f3ff'};font-weight:${j===0?700:400}">${c}</td>`).join('')+'</tr>';});
+  return h+'</table>';
+}
+
+/* ---------- question bank (based only on the 5 summary sheets) ----------
+ t: 'mc' (choices, a=index of correct in given list), 'tf' (a=true/false), 'num' (a=number) */
+const TOPICS = [
+{ id:'graph', name:'กราฟ', emo:'📈', color:'linear-gradient(135deg,#f472b6,#fb7185)', desc:'คู่อันดับ • จตุภาค • เส้นตรง', qs:[
+ {t:'num', q:'ยางลบ 1 ก้อนราคา 4 บาท (คู่อันดับ (1, 4), (2, 8), (3, 12), (4, 16))<br>ถ้าซื้อยางลบ <b>12 ก้อน</b> ต้องจ่ายกี่บาท?', fig:()=>tableFig([["ยางลบ (ก้อน)",1,2,3,4],["ราคา (บาท)",4,8,12,16]]), a:48, ex:'ก้อนละ 4 บาท → 12 × 4 = 48 บาท เขียนเป็นคู่อันดับได้ (12, 48)'},
+ {t:'mc', q:'ยางลบ 5 ก้อน ราคา 20 บาท เขียนเป็นคู่อันดับ (จำนวนยางลบ, ราคา) ได้ว่าอย่างไร?', choices:['(5, 20)','(20, 5)','(5, 4)','(4, 5)'], a:0, ex:'ตัวแรก (x) คือจำนวนยางลบ = 5 ตัวหลัง (y) คือราคา = 20 → (5, 20)'},
+ {t:'tf', q:'การเขียนคู่อันดับต้องเขียนเป็น (x, y) เสมอ โดยให้ x อยู่ด้านหน้า', a:true, ex:'ถูกต้อง! คู่อันดับเขียน (x, y) เสมอ x อยู่หน้า y อยู่หลัง'},
+ {t:'mc', q:`จุด (${M}2, 3) อยู่ในจตุภาคใด?`, fig:()=>plane([],{quads:true}), choices:['จตุภาคที่ 1','จตุภาคที่ 2','จตุภาคที่ 3','จตุภาคที่ 4'], a:1, ex:`x เป็นลบ, y เป็นบวก (${M}, +) → จตุภาคที่ 2`},
+ {t:'mc', q:`จุด (6, ${M}5) อยู่ในจตุภาคใด?`, choices:['จตุภาคที่ 1','จตุภาคที่ 2','จตุภาคที่ 3','จตุภาคที่ 4'], a:3, ex:`x เป็นบวก, y เป็นลบ (+, ${M}) → จตุภาคที่ 4`},
+ {t:'mc', q:`จุด (${M}1, ${M}3) อยู่ในจตุภาคใด?`, choices:['จตุภาคที่ 1','จตุภาคที่ 2','จตุภาคที่ 3','จตุภาคที่ 4'], a:2, ex:`x เป็นลบ และ y เป็นลบ (${M}, ${M}) → จตุภาคที่ 3`},
+ {t:'tf', q:'จุด (2, 2) อยู่ในจตุภาคที่ 1', a:true, ex:'x และ y เป็นบวกทั้งคู่ (+, +) → จตุภาคที่ 1'},
+ {t:'mc', q:'จุด (0, 4) อยู่ที่ไหน?', choices:['บนแกน y','บนแกน x','จตุภาคที่ 1','จตุภาคที่ 2'], a:0, ex:'ถ้า x = 0 จุดจะอยู่บนแกน y'},
+ {t:'mc', q:`จุด (${M}2, 0) อยู่ที่ไหน?`, choices:['บนแกน x','บนแกน y','จตุภาคที่ 2','จตุภาคที่ 3'], a:0, ex:'ถ้า y = 0 จุดจะอยู่บนแกน x'},
+ {t:'mc', q:'จุดสีชมพู P ในกราฟ คือคู่อันดับใด?', fig:()=>plane([{x:-3,y:2,label:'P'}]), choices:[`(${M}3, 2)`,`(2, ${M}3)`,`(3, ${M}2)`,`(${M}2, 3)`], a:0, ex:`อ่านแกน x ก่อน: ${M}3 แล้วอ่านแกน y: 2 → (${M}3, 2)`},
+ {t:'mc', q:'จากตาราง เขียนคู่อันดับ (น้ำหนัก, ส่วนสูง) ของคนแรกได้ว่าอะไร?', fig:()=>tableFig([["น้ำหนัก (กก.)",32,43,28,45],["ส่วนสูง (ซม.)",150,150,140,155]]), choices:['(32, 150)','(150, 32)','(32, 43)','(150, 150)'], a:0, ex:'สิ่งที่ขึ้นก่อน (น้ำหนัก) เป็น x → (32, 150)'},
+ {t:'num', q:'แอปเปิล 1 ลูก 10 บาท, 2 ลูก 20 บาท, … 6 ลูก 60 บาท<br>ถ้าซื้อแอปเปิล <b>9 ลูก</b> จะได้คู่อันดับ (9, ?) — ? คือเท่าไร', fig:()=>tableFig([["แอปเปิล (ลูก)",1,2,3,4,5,6],["ราคา (บาท)",10,20,30,40,50,60]]), a:90, ex:'ลูกละ 10 บาท → 9 × 10 = 90 ได้คู่อันดับ (9, 90)'},
+ {t:'mc', q:`สมการ x + 3y ${M} 4 = 0 อยู่ในรูป Ax + By + C = 0 แล้ว ค่า A, B, C คือข้อใด?`, choices:[`A = 1, B = 3, C = ${M}4`,'A = 1, B = 3, C = 4',`A = 0, B = 3, C = ${M}4`,'A = 3, B = 1, C = 4'], a:0, ex:`หน้า x ไม่มีเลขเขียน แปลว่า 1 → A = 1, B = 3, C = ${M}4 (เอาเครื่องหมายหน้าตัวเลขมาด้วย)`},
+ {t:'mc', q:'ความชัน (m) ของสมการ x + 3y = 4 คือข้อใด?', choices:[M+fr(1,3), fr(1,3), '3', M+'3'], a:0, ex:`จัดรูป x + 3y ${M} 4 = 0 → A = 1, B = 3 แล้ว m = ${M}${fr('A','B')} = ${M}${fr(1,3)}`},
+ {t:'mc', q:'ค่า b ของสมการ x + 3y = 4 (เมื่อเขียนเป็น y = mx + b) คือข้อใด?', choices:[fr(4,3), M+fr(4,3), '4', fr(3,4)], a:0, ex:`C = ${M}4, B = 3 → b = ${M}${fr('C','B')} = ${M}${fr(`${M}4`,3)} = ${fr(4,3)} ได้ y = ${M}${fr(1,3)}x + ${fr(4,3)}`},
+ {t:'num', q:`สมการ y = 3x ${M} 9 มีความชัน m เท่าไร?`, a:3, ex:`อยู่ในรูป y = mx + b แล้ว ตัวเลขหน้า x คือ m → m = 3 (และ b = ${M}9)`},
+ {t:'num', q:`สมการ y = 3x ${M} 9 มีค่า b เท่าไร?`, a:-9, ex:`ในรูป y = mx + b ตัวเลขที่บวกอยู่ท้ายคือ b → b = ${M}9`},
+ {t:'num', q:'สมการ 2x − y = 4 มีความชัน m เท่าไร?'.replace('−',M), a:2, ex:`ย้ายข้างให้ y อยู่ซ้ายตัวเดียว: y = 2x ${M} 4 → m = 2`},
+ {t:'mc', q:`ความชัน m ของสมการ 3x ${M} 2y = 0 คือข้อใด?`, choices:[fr(3,2), M+fr(3,2), fr(2,3), M+fr(2,3)], a:0, ex:`A = 3, B = ${M}2 → m = ${M}${fr('A','B')} = ${M}${fr(3,`${M}2`)} = ${fr(3,2)}`},
+ {t:'mc', q:'ถ้าความชัน m < 0 กราฟเส้นตรงจะเป็นอย่างไรกับแกน x?', choices:['ทำมุมป้านกับแกน x','ทำมุมแหลมกับแกน x','ขนานกับแกน x','ตั้งฉากกับแกน x'], a:0, ex:'m > 0 ทำมุมแหลม, m < 0 ทำมุมป้าน, m = 0 ขนานกับแกน x'},
+ {t:'mc', q:`กราฟของ y ${M} 5 = 0 (หรือ y = 5) เป็นอย่างไร?`, choices:['ขนานกับแกน x','ทำมุมแหลมกับแกน x','ทำมุมป้านกับแกน x','ผ่านจุด (0, 0)'], a:0, ex:'y = 0x + 5 → m = 0 กราฟจึงขนานกับแกน x'},
+ {t:'num', q:`แทนค่า x = 1 ในสมการ y = ${M}${fr(1,3)}x + ${fr(4,3)} จะได้ y เท่าไร?`, a:1, ex:`y = ${M}${fr(1,3)} + ${fr(4,3)} = ${fr(3,3)} = 1 ได้คู่อันดับ (1, 1)`},
+]},
+{ id:'geo', name:'การสร้างเรขาคณิต', emo:'📐', color:'linear-gradient(135deg,#a78bfa,#818cf8)', desc:'เส้นตรง • รังสี • มุม', qs:[
+ {t:'mc', q:'รูปนี้เรียกว่าอะไร?', fig:()=>lineFig('line'), choices:['เส้นตรง (line)','ส่วนของเส้นตรง (line segment)','รังสี (ray)','มุม (angle)'], a:0, ex:`มีลูกศรทั้งสองข้าง ยาวไม่จำกัด → เส้นตรง เขียนแทนด้วย ${line('AB')} หรือ ${line('BA')}`},
+ {t:'mc', q:'รูปนี้เรียกว่าอะไร?', fig:()=>lineFig('seg'), choices:['ส่วนของเส้นตรง (line segment)','เส้นตรง (line)','รังสี (ray)','จุด (point)'], a:0, ex:`มีจุดปลายสองจุด → ส่วนของเส้นตรง เขียนแทนด้วย ${seg('AB')} หรือ ${seg('BA')}`},
+ {t:'mc', q:'รูปนี้เรียกว่าอะไร?', fig:()=>lineFig('ray'), choices:['รังสี (ray)','เส้นตรง (line)','ส่วนของเส้นตรง (line segment)','มุม (angle)'], a:0, ex:`มีจุดปลายเพียงจุดเดียว (B) → รังสี เขียนแทนด้วย ${ray('BA')}`},
+ {t:'mc', q:'รังสีในรูป ต้องเขียนแทนด้วยข้อใด?', fig:()=>lineFig('ray'), choices:[ray('BA'), ray('AB'), line('AB'), seg('AB')], a:0, ex:'เขียนจุดปลาย (B) ก่อน แล้วให้ตัวที่อยู่ทางหัวลูกศรเป็นตัวสุดท้ายเสมอ → '+ray('BA')},
+ {t:'tf', q:'เส้นตรงมีความยาวไม่จำกัด ต่อออกไปได้ทั้งสองทิศทาง', a:true, ex:'ถูกต้อง! เส้นตรงต่อออกไปได้ในทิศทางของหัวลูกศรทั้งสองข้าง'},
+ {t:'tf', q:'ส่วนของเส้นตรงมีจุดปลายเพียง 1 จุด', a:false, ex:'ส่วนของเส้นตรงมีจุดปลาย 2 จุด ส่วนรังสีมีจุดปลาย 1 จุด'},
+ {t:'tf', q:'รังสีมีจุดปลายเพียงจุดเดียว', a:true, ex:'ถูกต้อง! รังสีมีจุดปลาย 1 จุด อีกด้านต่อไปไม่สิ้นสุด'},
+ {t:'mc', q:'มุม ACB (∠ACB) มีจุดยอดมุมคือจุดใด?', choices:['C','A','B','ไม่มีจุดยอดมุม'], a:0, ex:'ตัวอักษรตรงกลางคือจุดยอดมุม → ∠ACB มีจุดยอดมุมที่ C'},
+ {t:'mc', q:'มุม คือ รังสีสองเส้นที่มีจุดปลายเป็นจุดเดียวกัน จุดนั้นเรียกว่าอะไร?', choices:['จุดยอดมุม','แขนของมุม','จุดกึ่งกลาง','เส้นตั้งฉาก'], a:0, ex:'จุดปลายร่วมเรียกว่า "จุดยอดมุม" ส่วนรังสีทั้งสองเรียกว่า "แขนของมุม"'},
+ {t:'mc', q:'มุมที่มีขนาด 90° เรียกว่าอะไร?', choices:['มุมฉาก','มุมตรง','มุมแหลม','มุมป้าน'], a:0, ex:'90° = มุมฉาก'},
+ {t:'mc', q:'มุมที่มีขนาด 180° เรียกว่าอะไร?', choices:['มุมตรง','มุมฉาก','มุมกลับ','มุมป้าน'], a:0, ex:'180° = มุมตรง (เหมือนเส้นตรง)'},
+ {t:'mc', q:'มุมขนาด 40° เป็นมุมชนิดใด?', choices:['มุมแหลม','มุมป้าน','มุมฉาก','มุมกลับ'], a:0, ex:'มุมแหลมมีขนาดมากกว่า 0° แต่น้อยกว่า 90°'},
+ {t:'mc', q:'มุมขนาด 120° เป็นมุมชนิดใด?', choices:['มุมป้าน','มุมแหลม','มุมตรง','มุมกลับ'], a:0, ex:'มุมป้านมีขนาดมากกว่า 90° แต่น้อยกว่า 180°'},
+ {t:'mc', q:'มุมขนาด 250° เป็นมุมชนิดใด?', choices:['มุมกลับ','มุมป้าน','มุมตรง','มุมฉาก'], a:0, ex:'มุมกลับมีขนาดมากกว่า 180° แต่น้อยกว่า 360°'},
+ {t:'tf', q:'มุมแหลมมีขนาด 90° พอดี', a:false, ex:'90° พอดีคือมุมฉาก มุมแหลมต้องน้อยกว่า 90°'},
+ {t:'tf', q:'มุมป้านมีขนาดมากกว่า 90° แต่น้อยกว่า 180°', a:true, ex:'ถูกต้อง! 90° < มุมป้าน < 180°'},
+ {t:'num', q:'จากรูป ∠BOC = 40° และ E, O, C อยู่บนเส้นตรงเดียวกัน<br>จงหาขนาดของ ∠EOB (องศา)', fig:()=>angleFig(), a:140, ex:'∠EOC เป็นมุมตรง = 180° → ∠EOB = 180° − 40° = 140°'.replace('−',M)},
+ {t:'num', q:'จากรูป ∠AOC = 90° และ ∠BOC = 40°<br>จงหาขนาดของ ∠AOB (องศา)', fig:()=>angleFig(), a:50, ex:`∠AOB = 90° ${M} 40° = 50°`},
+ {t:'num', q:'จากรูป ∠AOD มีขนาดกี่องศา? (A อยู่บน D อยู่ล่าง ผ่านจุด O)', fig:()=>angleFig(), a:180, ex:'A, O, D อยู่บนเส้นตรงเดียวกัน → ∠AOD เป็นมุมตรง = 180°'},
+ {t:'num', q:'การสร้างเส้นตั้งฉาก: เส้นตั้งฉากทำมุมกับเส้นตรงเดิมกี่องศา?', a:90, ex:'เส้นตั้งฉากทำมุม 90° (มุมฉาก) กับเส้นตรงเดิม ไม่ว่าจะสร้างจากจุดภายนอกหรือจุดบนเส้นตรง'},
+]},
+{ id:'int', name:'จำนวนเต็ม', emo:'➕', color:'linear-gradient(135deg,#38bdf8,#22d3ee)', desc:'บวก ลบ คูณ หาร • สมบัติ', qs:[
+ {t:'mc', q:'จำนวนเต็มลบที่มีค่ามากที่สุดคือข้อใด?', choices:[M+'1', M+'100', '0', '1'], a:0, ex:`${M}1 คือจำนวนเต็มลบที่มีค่ามากที่สุด (ลบยิ่งมาก ค่ายิ่งน้อย) ส่วน 0 ไม่ใช่จำนวนลบ`},
+ {t:'mc', q:`จำนวนตรงข้ามของ ${M}3 คือข้อใด?`, choices:['3',M+'3','0',fr(1,3)], a:0, ex:`จำนวนตรงข้ามอยู่ห่างจาก 0 เท่ากัน → ${M}3 ตรงข้ามกับ 3`},
+ {t:'num', q:`ค่าสัมบูรณ์ของ ${M}20 หรือ |${M}20| เท่ากับเท่าไร?`, a:20, ex:'ค่าสัมบูรณ์คือระยะห่างจาก 0 เป็นบวกเสมอ → 20'},
+ {t:'tf', q:'ค่าสัมบูรณ์ของจำนวนใด ๆ เป็นจำนวนลบได้', a:false, ex:'ค่าสัมบูรณ์เป็นระยะทาง จึงไม่เป็นลบ (เป็นบวก หรือเป็น 0 เมื่อเป็นค่าสัมบูรณ์ของ 0)'},
+ {t:'num', q:`(${M}2) + (${M}5) = ?`, a:-7, ex:`ลบ + ลบ = ลบ: เอา 2 + 5 = 7 แล้วใส่เครื่องหมายลบ → ${M}7`},
+ {t:'num', q:`3 + (${M}8) = ?`, a:-5, ex:`ดูว่าเลขไหนค่ามากกว่า (8) ซึ่งเป็นลบ ผลจึงเป็นลบ แล้วเอา 8 ${M} 3 = 5 → ${M}5`},
+ {t:'num', q:`5 ${M} 8 = ?`, a:-3, ex:`8 มีค่ามากกว่าและเป็นตัวลบ ผลจึงเป็นลบ: 8 ${M} 5 = 3 → ${M}3`},
+ {t:'num', q:`3 ${M} (${M}7) = ?`, a:10, ex:`${M}(${M} เปลี่ยนเป็น + → 3 + 7 = 10`},
+ {t:'num', q:`${M}3 ${M} 5 = ?`, a:-8, ex:`${M}3 ${M} 5 = (${M}3) + (${M}5) = ${M}8`},
+ {t:'num', q:`${M}3 ${M} (${M}5) = ?`, a:2, ex:`${M}(${M}5) กลายเป็น +5 → ${M}3 + 5 = 2`},
+ {t:'num', q:`(${M}8) × 5 = ?`, a:-40, ex:`ลบ × บวก = ลบ → ${M}40`},
+ {t:'num', q:`(${M}5) × (${M}30) = ?`, a:150, ex:'ลบ × ลบ = บวก → 150'},
+ {t:'num', q:`99 ÷ (${M}3) = ?`, a:-33, ex:`บวก ÷ ลบ = ลบ → ${M}33`},
+ {t:'num', q:`(${M}90) ÷ (${M}30) = ?`, a:3, ex:'ลบ ÷ ลบ = บวก → 3'},
+ {t:'tf', q:'ผลคูณของจำนวนเต็มลบสองจำนวนเป็นจำนวนเต็มลบ', a:false, ex:`ลบ × ลบ = บวก เช่น (${M}5) × (${M}30) = 150`},
+ {t:'num', q:`[20 + {3 ${M} (8 ${M} 5)}] = ?`, a:20, ex:`ทำ ( ) → { } → [ ]: (8 ${M} 5) = 3 → {3 ${M} 3} = 0 → [20 + 0] = 20`},
+ {t:'num', q:`[(${M}80) ${M} 40] ÷ 12 = ?`, a:-10, ex:`(${M}80) ${M} 40 = ${M}120 แล้ว ${M}120 ÷ 12 = ${M}10`},
+ {t:'num', q:`(${M}72) ÷ {(${M}3) ${M} 5} = ?`, a:9, ex:`ในวงเล็บ: (${M}3) ${M} 5 = ${M}8 → (${M}72) ÷ (${M}8) = 9`},
+ {t:'num', q:'56 ÷ (84 ÷ 12) = ?', a:8, ex:'ทำในวงเล็บก่อน: 84 ÷ 12 = 7 → 56 ÷ 7 = 8'},
+ {t:'mc', q:'a + b = b + a เช่น 2 + 3 = 3 + 2 เป็นสมบัติใด?', choices:['สมบัติการสลับที่การบวก','สมบัติการเปลี่ยนหมู่ของการบวก','สมบัติการแจกแจง','สมบัติปิดการบวก'], a:0, ex:'สลับตำแหน่งตัวบวกแล้วผลเท่าเดิม = สมบัติการสลับที่การบวก'},
+ {t:'mc', q:'2(3 + 9) = (2 × 3) + (2 × 9) เป็นสมบัติใด?', choices:['สมบัติการแจกแจง','สมบัติการสลับที่การคูณ','สมบัติการเปลี่ยนหมู่ของการคูณ','สมบัติสะท้อน'], a:0, ex:'a(b + c) = ab + ac คือสมบัติการแจกแจง'},
+ {t:'tf', q:'(2 + 3) + 8 = 2 + (3 + 8) เป็นสมบัติการเปลี่ยนหมู่ของการบวก', a:true, ex:'ถูกต้อง! (a + b) + c = a + (b + c) คือสมบัติการเปลี่ยนหมู่ของการบวก'},
+ {t:'num', q:'ใช้สมบัติการแจกแจง: 3(4 + 5) = ?', a:27, ex:'(3 × 4) + (3 × 5) = 12 + 15 = 27'},
+ {t:'num', q:`ให้ a = ${M}4, b = 3, c = ${M}4 แล้ว a + b ${M} c มีค่าเท่าไร?`, a:3, ex:`${M}4 + 3 ${M} (${M}4) = ${M}1 + 4 = 3`},
+ {t:'num', q:`เติมตัวเลขในช่องว่าง: 8 + ☐ = ${M}3`, a:-11, ex:`☐ = ${M}3 ${M} 8 = ${M}11 ตรวจ: 8 + (${M}11) = ${M}3 ✓`},
+]},
+{ id:'stat', name:'สถิติ', emo:'📊', color:'linear-gradient(135deg,#34d399,#4ade80)', desc:'ข้อมูล • แผนภูมิ • วงกลม', qs:[
+ {t:'mc', q:'การทำงานทางสถิติมีกี่ขั้นตอน?', choices:['4 ขั้นตอน','3 ขั้นตอน','5 ขั้นตอน','2 ขั้นตอน'], a:0, ex:'4 ขั้นตอน: เก็บรวบรวม → นำเสนอ → วิเคราะห์ → แปลความข้อมูล'},
+ {t:'mc', q:'ขั้นตอนแรกของการทำงานทางสถิติคือข้อใด?', choices:['การเก็บรวบรวมข้อมูล','การนำเสนอข้อมูล','การวิเคราะห์ข้อมูล','การแปลความข้อมูล'], a:0, ex:'เริ่มจากเก็บรวบรวมข้อมูลก่อนเสมอ'},
+ {t:'mc', q:'ขั้นตอนสุดท้ายของการทำงานทางสถิติคือข้อใด?', choices:['การแปลความข้อมูล','การเก็บรวบรวมข้อมูล','การนำเสนอข้อมูล','การวิเคราะห์ข้อมูล'], a:0, ex:'ขั้นที่ 4 (สุดท้าย) คือ การแปลความข้อมูล'},
+ {t:'mc', q:'กลุ่มของสิ่งที่เราสนใจจะศึกษา<b>ทั้งหมด</b> เรียกว่าอะไร?', choices:['ประชากร','กลุ่มตัวอย่าง','ข้อมูลทุติยภูมิ','ข้อมูลเชิงคุณภาพ'], a:0, ex:'ประชากร = ทั้งหมดที่สนใจ ส่วนกลุ่มตัวอย่าง = บางส่วนของประชากร'},
+ {t:'tf', q:'กลุ่มตัวอย่าง คือ บางส่วนของประชากร', a:true, ex:'ถูกต้อง! กลุ่มตัวอย่างเป็นส่วนหนึ่งของประชากร'},
+ {t:'mc', q:'ข้อใดเป็น<b>ข้อมูลเชิงปริมาณ</b>?', choices:['ส่วนสูง 150 เซนติเมตร','สีที่ชอบ','ความคิดเห็นต่ออาหารกลางวัน','ชื่อเล่นของเพื่อน'], a:0, ex:'ข้อมูลเชิงปริมาณเป็นตัวเลข วัดได้ คำนวณได้ เปรียบเทียบได้'},
+ {t:'mc', q:'ข้อใดเป็น<b>ข้อมูลเชิงคุณภาพ</b>?', choices:['ความคิดเห็นต่อรสชาติอาหาร','น้ำหนัก 45 กิโลกรัม','อายุ 13 ปี','คะแนนสอบ 18 คะแนน'], a:0, ex:'ข้อมูลเชิงคุณภาพเป็นคำบรรยาย ความคิดเห็น หรือคุณลักษณะ ไม่ใช่ตัวเลขโดยตรง'},
+ {t:'mc', q:'ข้อใดเป็น<b>คำถามทางสถิติ</b>?', choices:['นักเรียนห้อง ม.1/1 แต่ละคนสูงเท่าไร','วันนี้เป็นวันอะไร','ฉันสูงเท่าไร','1 + 1 เท่ากับเท่าไร'], a:0, ex:'คำถามทางสถิติต้องเก็บข้อมูลจากหลายหน่วย คำตอบแตกต่างกันได้ และต้องคำนวณหรือสรุปผล'},
+ {t:'tf', q:'คำถามทางสถิติต้องมีคำตอบตายตัวเพียงคำตอบเดียว', a:false, ex:'คำถามทางสถิติ คำตอบต้องแตกต่างกันได้ ห้ามมีคำตอบตายตัว'},
+ {t:'mc', q:'ถ้าต้องการสำรวจความคิดเห็นหรือความพึงพอใจของคน<b>จำนวนมาก</b> ควรเก็บข้อมูลแบบใด?', choices:['แบบทดสอบ (แบบสอบถาม)','การทดลอง','การสังเกต','ทุติยภูมิ'], a:0, ex:'ตามชีท: แบบทดสอบเหมาะแก่การสำรวจความคิดเห็น ความพึงพอใจของคนจำนวนมาก'},
+ {t:'mc', q:'การถามคำถามโดยตรง (พบหน้า/โทรศัพท์/ออนไลน์) คือการเก็บข้อมูลแบบใด?', choices:['การสัมภาษณ์','การสังเกต','การทดลอง','ทุติยภูมิ'], a:0, ex:'การสัมภาษณ์ = ถามคำถามโดยตรง'},
+ {t:'mc', q:'ข้อมูลที่มีคนเก็บรวบรวมไว้แล้ว เรียกว่าข้อมูลแบบใด?', choices:['ทุติยภูมิ','การทดลอง','การสัมภาษณ์','การสังเกต'], a:0, ex:'ทุติยภูมิ = ข้อมูลที่มีคนเก็บมาไว้แล้ว'},
+ {t:'mc', q:'แผนภูมิที่ใช้<b>รูปภาพ</b>แทนจำนวน เพื่อให้อ่านง่ายและเห็นภาพชัด คือข้อใด?', choices:['แผนภูมิรูปภาพ','แผนภูมิรูปแท่ง','แผนภูมิวงกลม','แผนภูมิกราฟเส้น'], a:0, ex:'แผนภูมิรูปภาพใช้รูปแทนจำนวน'},
+ {t:'num', q:'จากแผนภูมิรูปภาพ ขายแอปเปิลไปกี่กิโลกรัม?', fig:()=>pictoFig(), a:14, ex:'แอปเปิล 7 รูป × 2 กิโลกรัม = 14 กิโลกรัม'},
+ {t:'num', q:'จากแผนภูมิรูปภาพ ขายกล้วยมากกว่าแตงโมกี่กิโลกรัม?', fig:()=>pictoFig(), a:8, ex:`กล้วย 5 รูป = 10 กก. แตงโม 1 รูป = 2 กก. → 10 ${M} 2 = 8 กก.`},
+ {t:'mc', q:'จากแผนภูมิรูปแท่ง ปี 2014 (แท่งสีแดง) ผลไม้ใดขายได้มากที่สุด?', fig:()=>barFig(), choices:['ส้ม','แอปเปิล','กล้วย','เท่ากันหมด'], a:0, ex:'ปี 2014: ส้ม 700 มากกว่าแอปเปิล 600 และกล้วย 550'},
+ {t:'mc', q:'ถ้าต้องการแสดง<b>สัดส่วน</b>ของข้อมูลเทียบกับทั้งหมด (100%) ควรใช้แผนภูมิใด?', choices:['แผนภูมิวงกลม','แผนภูมิรูปภาพ','แผนภูมิรูปแท่ง','แผนภูมิกราฟเส้น'], a:0, ex:'แผนภูมิวงกลมแบ่งสัดส่วนเทียบกับทั้งหมด 100%'},
+ {t:'mc', q:'ถ้าต้องการดู<b>แนวโน้ม</b>ของข้อมูลบนแกน x, y (เช่น ปริมาณน้ำฝนแต่ละเดือน) ควรใช้แผนภูมิใด?', choices:['แผนภูมิกราฟ (เส้น)','แผนภูมิวงกลม','แผนภูมิรูปภาพ','ตาราง'], a:0, ex:'แผนภูมิกราฟแสดงข้อมูลบนแกน x, y เพื่อดูแนวโน้ม'},
+ {t:'num', q:'จากแผนภูมิวงกลม (ทั้งหมด 100 คน) มีคนชอบดื่ม<b>ชา</b>กี่คน?', fig:()=>pieFig(), a:36, ex:`${fr(36,100)} × 100 = 36 คน`},
+ {t:'num', q:'จากแผนภูมิวงกลม ส่วนของ<b>น้ำผลไม้</b> (5%) มีมุมที่จุดศูนย์กลางกี่องศา?', fig:()=>pieFig(), a:18, ex:'หาองศาจาก % → % × 3.6 = 5 × 3.6 = 18°'},
+ {t:'num', q:'จากแผนภูมิวงกลม ส่วนของ<b>กาแฟ</b> (38%) มีมุมกี่องศา? (ตอบเป็นทศนิยมได้)', fig:()=>pieFig(), a:136.8, ex:`360 × ${fr(38,100)} = 38 × 3.6 = 136.8°`},
+ {t:'tf', q:'มุมทั้งหมดในแผนภูมิวงกลมรวมกันได้ 360°', a:true, ex:'ถูกต้อง! ทั้งวง 100% = 360° จึงใช้ % × 3.6 หาองศา'},
+]},
+{ id:'exp', name:'เลขยกกำลัง', emo:'🚀', color:'linear-gradient(135deg,#fb923c,#fbbf24)', desc:'กฎเลขยกกำลัง • สัญกรณ์วิทย์', qs:[
+ {t:'mc', q:'3<sup>4</sup> หมายถึงข้อใด?', choices:['3 × 3 × 3 × 3','3 × 4','4 × 4 × 4','3 + 3 + 3 + 3'], a:0, ex:'3<sup>4</sup> = 3 คูณกัน 4 ตัว อ่านว่า "3 ยกกำลัง 4"'},
+ {t:'num', q:'2<sup>4</sup> = ?', a:16, ex:'2 × 2 × 2 × 2 = 16'},
+ {t:'num', q:`(${M}2)<sup>5</sup> = ?`, a:-32, ex:`(${M}2) คูณกัน 5 ตัว: จำนวนตัวคูณลบเป็นคี่ ผลเป็นลบ → ${M}32`},
+ {t:'num', q:`${M}1<sup>2</sup> = ?`, a:-1, ex:`ไม่มีวงเล็บ เลขฐานคือ 1 → ${M}(1 × 1) = ${M}1`},
+ {t:'mc', q:`เลขฐานของ (${M}2)<sup>9</sup> คือข้อใด?`, choices:[M+'2','2','9',M+'9'], a:0, ex:`มีวงเล็บ → เลขฐานคือ ${M}2`},
+ {t:'mc', q:`เลขฐานของ ${M}8<sup>4</sup> คือข้อใด?`, choices:['8',M+'8','4',M+'4'], a:0, ex:`ไม่มีวงเล็บ เครื่องหมายลบไม่ได้อยู่ในฐาน → เลขฐานคือ 8`},
+ {t:'mc', q:'2<sup>3</sup> × 2<sup>5</sup> = ?', choices:['2<sup>8</sup>','2<sup>15</sup>','4<sup>8</sup>','2<sup>2</sup>'], a:0, ex:'a<sup>m</sup> × a<sup>n</sup> = a<sup>m+n</sup> → 2<sup>3+5</sup> = 2<sup>8</sup>'},
+ {t:'mc', q:'3<sup>9</sup> ÷ 3<sup>6</sup> = ?', choices:['3<sup>3</sup>','3<sup>15</sup>','1<sup>3</sup>','3<sup>54</sup>'], a:0, ex:`a<sup>m</sup> ÷ a<sup>n</sup> = a<sup>m${M}n</sup> → 3<sup>9${M}6</sup> = 3<sup>3</sup>`},
+ {t:'num', q:'9<sup>0</sup> = ?', a:1, ex:'a<sup>0</sup> = 1 เสมอ (a ≠ 0)'},
+ {t:'mc', q:`3<sup>${M}9</sup> เท่ากับข้อใด?`, choices:[fr(1,'3<sup>9</sup>'),`${M}3<sup>9</sup>`,'3<sup>9</sup>',`${M}27`], a:0, ex:`a<sup>${M}n</sup> = ${fr(1,'a<sup>n</sup>')} → 3<sup>${M}9</sup> = ${fr(1,'3<sup>9</sup>')}`},
+ {t:'mc', q:'(2<sup>3</sup>)<sup>2</sup> = ?', choices:['2<sup>6</sup>','2<sup>5</sup>','2<sup>9</sup>','4<sup>3</sup>'], a:0, ex:'(a<sup>m</sup>)<sup>n</sup> = a<sup>m×n</sup> → 2<sup>3×2</sup> = 2<sup>6</sup>'},
+ {t:'mc', q:'(3 × 2)<sup>6</sup> = ?', choices:['3<sup>6</sup> × 2<sup>6</sup>','3 × 2<sup>6</sup>','3<sup>6</sup> × 2','6<sup>12</sup>'], a:0, ex:'(a × b)<sup>n</sup> = a<sup>n</sup> × b<sup>n</sup>'},
+ {t:'mc', q:`(${fr(6,7)})<sup>2</sup> = ?`, choices:[fr('6<sup>2</sup>','7<sup>2</sup>'), fr('6<sup>2</sup>','7'), fr(12,14), fr(6,'7<sup>2</sup>')], a:0, ex:`(${fr('a','b')})<sup>n</sup> = ${fr('a<sup>n</sup>','b<sup>n</sup>')}`},
+ {t:'mc', q:'2<sup>3</sup> × 4 = ?', choices:['2<sup>5</sup>','2<sup>4</sup>','8<sup>4</sup>','2<sup>12</sup>'], a:0, ex:'เปลี่ยน 4 เป็น 2<sup>2</sup> ก่อน → 2<sup>3</sup> × 2<sup>2</sup> = 2<sup>5</sup>'},
+ {t:'tf', q:'2<sup>3<sup>2</sup></sup> = 2<sup>6</sup>', a:false, ex:'3<sup>2</sup> = 3 × 3 = 9 → 2<sup>3<sup>2</sup></sup> = 2<sup>9</sup> (ต่างจาก (2<sup>3</sup>)<sup>2</sup> = 2<sup>6</sup>)'},
+ {t:'num', q:'10<sup>0</sup> × 5<sup>2</sup> = ?', a:25, ex:'10<sup>0</sup> = 1, 5<sup>2</sup> = 25 → 1 × 25 = 25'},
+ {t:'num', q:`5<sup>${M}2</sup> × 5<sup>4</sup> = ?`, a:25, ex:`5<sup>${M}2+4</sup> = 5<sup>2</sup> = 25`},
+ {t:'num', q:`(${M}3)<sup>2</sup> × (${M}3)<sup>3</sup> = ?`, a:-243, ex:`(${M}3)<sup>2+3</sup> = (${M}3)<sup>5</sup> = ${M}243`},
+ {t:'num', q:`${fr('2<sup>5</sup> × 2<sup>3</sup>','2<sup>6</sup>')} = ?`, a:4, ex:`2<sup>5+3${M}6</sup> = 2<sup>2</sup> = 4`},
+ {t:'num', q:`${fr('27<sup>2</sup>','3<sup>4</sup>')} = ?`, a:9, ex:`27 = 3<sup>3</sup> → 27<sup>2</sup> = 3<sup>6</sup> → 3<sup>6${M}4</sup> = 3<sup>2</sup> = 9`},
+ {t:'tf', q:'สัญกรณ์วิทยาศาสตร์ A × 10<sup>n</sup> ต้องมี 1 ≤ A < 10', a:true, ex:'ถูกต้อง! A ต้องมากกว่าหรือเท่ากับ 1 และน้อยกว่า 10'},
+ {t:'mc', q:'2,594,000 เขียนในรูปสัญกรณ์วิทยาศาสตร์ได้ว่าอย่างไร?', choices:['2.594 × 10<sup>6</sup>','25.94 × 10<sup>5</sup>','2.594 × 10<sup>5</sup>',`2.594 × 10<sup>${M}6</sup>`], a:0, ex:'เลื่อนจุดไปข้างหน้า 6 ช่อง → เลขชี้กำลังเป็นบวก: 2.594 × 10<sup>6</sup>'},
+ {t:'mc', q:'0.00028 เขียนในรูปสัญกรณ์วิทยาศาสตร์ได้ว่าอย่างไร?', choices:[`2.8 × 10<sup>${M}4</sup>`,'2.8 × 10<sup>4</sup>',`28 × 10<sup>${M}5</sup>`,`2.8 × 10<sup>${M}3</sup>`], a:0, ex:`เลื่อนจุดไปข้างหลัง 4 ช่อง → เลขชี้กำลังเป็นลบ: 2.8 × 10<sup>${M}4</sup>`},
+ {t:'mc', q:`2.21 × 10<sup>${M}5</sup> เท่ากับข้อใด?`, choices:['0.0000221','0.000221','221000','0.00000221'], a:0, ex:'เลื่อนจุดไปทางซ้าย 5 ช่อง → 0.0000221'},
+ {t:'num', q:'2.875 × 10<sup>6</sup> = ? (ตอบเป็นจำนวนเต็ม)', a:2875000, ex:'เลื่อนจุดไปทางขวา 6 ช่อง → 2,875,000'},
+ {t:'mc', q:'3,000 เขียนในรูปสัญกรณ์วิทยาศาสตร์ได้ว่าอย่างไร?', choices:['3 × 10<sup>3</sup>','3 × 10<sup>4</sup>','30 × 10<sup>2</sup>','0.3 × 10<sup>4</sup>'], a:0, ex:'3,000 = 3 × 1,000 = 3 × 10<sup>3</sup> (A = 3 อยู่ระหว่าง 1 ถึง 10)'},
+]},
+];
+
+/* ---------- state ---------- */
+const $=id=>document.getElementById(id);
+const S={topic:null, list:[], i:0, score:0, streak:0, best:0, wrong:[], answered:false, timerOn:true, t0:0, tick:null, mode:'normal', input:''};
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return null;}}
+const MIXED={id:'mixed', name:'รวมทุกเรื่อง', emo:'🎲'};
+
+/* ---------- visual layer (no effect on game logic) ---------- */
+const RM = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : {matches:false};
+const MASCOT = `<g class="body">
+ <ellipse cx="60" cy="113" rx="30" ry="5" fill="rgba(46,31,79,.22)"/>
+ <path d="M24 92c-8 2-12-4-10-9M96 92c8 2 12-4 10-9" stroke="#2e1f4f" stroke-width="4" fill="#3aa8ff" stroke-linecap="round"/>
+ <path d="M60 18c26 0 42 20 42 46 0 26-18 44-42 44S18 90 18 64c0-26 16-46 42-46z" fill="url(#mbody)" stroke="#2e1f4f" stroke-width="4"/>
+ <path d="M34 36c6-8 16-12 24-12" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".6"/>
+ <path d="M60 4l30 11-30 11-30-11z" fill="#2e1f4f"/><path d="M44 21v8c0 4 32 4 32 0v-8l-16 6z" fill="#3b2a6a"/>
+ <path d="M88 16v13" stroke="#ffd23f" stroke-width="3"/><circle cx="88" cy="31" r="4" fill="#ffd23f"/>
+ <ellipse cx="34" cy="74" rx="8" ry="5" fill="#ff8fc0" opacity=".8"/><ellipse cx="86" cy="74" rx="8" ry="5" fill="#ff8fc0" opacity=".8"/>
+ <g class="e-neutral"><g class="blink"><ellipse cx="45" cy="58" rx="9" ry="11" fill="#fff" stroke="#2e1f4f" stroke-width="3"/><ellipse cx="75" cy="58" rx="9" ry="11" fill="#fff" stroke="#2e1f4f" stroke-width="3"/>
+  <circle cx="47" cy="60" r="5" fill="#2e1f4f"/><circle cx="77" cy="60" r="5" fill="#2e1f4f"/><circle cx="49" cy="57" r="1.8" fill="#fff"/><circle cx="79" cy="57" r="1.8" fill="#fff"/></g>
+  <path d="M50 80q10 7 20 0" stroke="#2e1f4f" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+ <g class="e-happy"><path d="M36 60q9-12 18 0M66 60q9-12 18 0" stroke="#2e1f4f" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M44 74h32q0 18-16 18T44 74z" fill="#2e1f4f"/><path d="M52 85q8-6 16 0q-8 7-16 0z" fill="#ff6b8b"/>
+  <path d="M100 30l2.5 5.5 5.5 2.5-5.5 2.5-2.5 5.5-2.5-5.5-5.5-2.5 5.5-2.5z" fill="#ffd23f"/><path d="M16 40l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#ffd23f"/></g>
+ <g class="e-sad"><path d="M36 48l14 5M84 48l-14 5" stroke="#2e1f4f" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="45" cy="62" rx="8" ry="9" fill="#fff" stroke="#2e1f4f" stroke-width="3"/><ellipse cx="75" cy="62" rx="8" ry="9" fill="#fff" stroke="#2e1f4f" stroke-width="3"/>
+  <circle cx="45" cy="66" r="4.5" fill="#2e1f4f"/><circle cx="75" cy="66" r="4.5" fill="#2e1f4f"/>
+  <path d="M48 88q12-10 24 0" stroke="#2e1f4f" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M34 72q-4 8 0 11q4-3 0-11z" fill="#7dd3fc" stroke="#0284c7" stroke-width="1.5"/></g>
+</g>`;
+function setMood(id, mood){ const m=$(id); if(!m) return; m.classList.remove('happy','sad'); if(mood!=='neutral'){ m.getBoundingClientRect(); m.classList.add(mood);} }
+const ICONS={
+ graph:`<svg viewBox="0 0 48 48"><path d="M8 6v34h34" stroke="#2e1f4f" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M12 34l9-9 7 5 12-16" stroke="#ff3d8b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="25" r="3.5" fill="#22b8f0"/><circle cx="28" cy="30" r="3.5" fill="#ffb020"/><circle cx="40" cy="14" r="3.5" fill="#22c55e"/></svg>`,
+ geo:`<svg viewBox="0 0 48 48"><path d="M24 6L6 40h36z" fill="#efe5ff" stroke="#8b3dff" stroke-width="3.5" stroke-linejoin="round"/><path d="M14 40a10 10 0 0 0-3.5-7.5" stroke="#ff3d8b" stroke-width="3" fill="none"/><circle cx="24" cy="6" r="3.5" fill="#ffb020"/><circle cx="6" cy="40" r="3.5" fill="#22b8f0"/><circle cx="42" cy="40" r="3.5" fill="#22c55e"/><path d="M24 6v34" stroke="#2e1f4f" stroke-width="2" stroke-dasharray="3 3"/></svg>`,
+ int:`<svg viewBox="0 0 48 48"><path d="M4 30h40" stroke="#2e1f4f" stroke-width="3.5" stroke-linecap="round"/><path d="M4 30l5-4v8zM44 30l-5-4v8z" fill="#2e1f4f"/><path d="M14 26v8M24 26v8M34 26v8" stroke="#2e1f4f" stroke-width="2.5"/><circle cx="14" cy="14" r="8" fill="#0ea5e9"/><path d="M10 14h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="34" cy="14" r="8" fill="#ff3d8b"/><path d="M30 14h8M34 10v8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`,
+ stat:`<svg viewBox="0 0 48 48"><path d="M6 42h36" stroke="#2e1f4f" stroke-width="3.5" stroke-linecap="round"/><rect x="9" y="26" width="7" height="16" rx="2" fill="#22c55e"/><rect x="20" y="16" width="7" height="26" rx="2" fill="#22b8f0"/><rect x="31" y="22" width="7" height="20" rx="2" fill="#ffb020"/><circle cx="36" cy="10" r="7" fill="#ff3d8b"/><path d="M36 10V3a7 7 0 0 1 7 7z" fill="#ffd23f"/></svg>`,
+ exp:`<svg viewBox="0 0 48 48"><rect x="4" y="12" width="40" height="30" rx="8" fill="#fff2e0" stroke="#ff7a00" stroke-width="3"/><text x="12" y="36" font-size="22" font-weight="900" fill="#2e1f4f" font-family="sans-serif">a</text><text x="25" y="25" font-size="15" font-weight="900" fill="#ff3d8b" font-family="sans-serif">n</text><path d="M38 4l1.8 4 4 1.8-4 1.8-1.8 4-1.8-4-4-1.8 4-1.8z" fill="#ffd23f" stroke="#e0a800"/></svg>`,
+ mixed:`<svg viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="9" fill="#fff" stroke="#a855f7" stroke-width="3.5" transform="rotate(-8 24 24)"/><g transform="rotate(-8 24 24)"><circle cx="15" cy="15" r="3.5" fill="#ff3d8b"/><circle cx="33" cy="15" r="3.5" fill="#22b8f0"/><circle cx="24" cy="24" r="3.5" fill="#ffb020"/><circle cx="15" cy="33" r="3.5" fill="#22c55e"/><circle cx="33" cy="33" r="3.5" fill="#8b3dff"/></g></svg>`
+};
+const STAR=(on)=>`<svg viewBox="0 0 60 60"><path d="M30 4l7.6 15.6 17.2 2.5-12.4 12.1 2.9 17.1L30 43.2l-15.3 8.1 2.9-17.1L5.2 22.1l17.2-2.5z" fill="${on?'url(#gold)':'#e7e2f3'}" stroke="${on?'#c98a00':'#c9c0dd'}" stroke-width="3.5" stroke-linejoin="round"/>${on?'<path d="M22 20l4-1" stroke="#fff" stroke-width="3" stroke-linecap="round"/>':''}</svg>`;
+const BADGES=[['b0','นักผจญภัยมือใหม่'],['b1','นักสู้ไม่ถอย'],['b2','นักคณิตดาวรุ่ง'],['b3','ปรมาจารย์คณิต']];
+const MEDAL=`<svg viewBox="0 0 40 40"><path d="M12 2h7l-3 14h-7zM28 2h-7l3 14h7z" fill="#ff4d8b" stroke="#fff" stroke-width="1.5"/><circle cx="20" cy="25" r="12" fill="url(#gold)" stroke="#fff" stroke-width="2.5"/><path d="M20 18l2.2 4.4 4.8.7-3.5 3.4.8 4.8-4.3-2.3-4.3 2.3.8-4.8-3.5-3.4 4.8-.7z" fill="#fff"/></svg>`;
+
+/* sound: WebAudio, generated tones only */
+const SND={ctx:null, muted: store('mrg_mute')==='1'};
+function actx(){ if(SND.muted) return null; try{ if(!SND.ctx){const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; SND.ctx=new C();} if(SND.ctx.state==='suspended') SND.ctx.resume(); }catch(e){return null;} return SND.ctx; }
+function tone(f, t0, dur, type='sine', vol=.18, f2){ const c=actx(); if(!c) return; const o=c.createOscillator(), g=c.createGain(), t=c.currentTime+t0;
+  o.type=type; o.frequency.setValueAtTime(f,t); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.015); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+0.02); }
+const sfx={
+ tap(){ tone(660,0,.06,'triangle',.08); },
+ good(){ [523,659,784,1047].forEach((f,i)=>tone(f,i*.07,.18,'triangle',.16)); },
+ bad(){ tone(220,0,.22,'sawtooth',.08,140); tone(180,.12,.28,'square',.05,110); },
+ fire(){ tone(300,0,.35,'sawtooth',.05,1200); tone(900,.15,.25,'triangle',.08,1500); },
+ win(){ [523,659,784,659,784,1047].forEach((f,i)=>tone(f,i*.12,.24,'triangle',.16)); tone(1568,.75,.5,'sine',.1); },
+ lose(){ [392,349,330].forEach((f,i)=>tone(f,i*.16,.25,'triangle',.12)); }
+};
+function syncMute(){ $('muteBtn').classList.toggle('muted',SND.muted); }
+
+/* particles: capped counts, transform/opacity only */
+const COLORS=['#ff4d8b','#ffd23f','#22c55e','#22b8f0','#a855f7','#ff8a1f'];
+function burst(x,y,n=22){ if(RM.matches) return; n=Math.min(n,28);
+  for(let i=0;i<n;i++){ const s=document.createElement('div'); s.className='confetti burst '+(i%3===0?'star':i%3===1?'dot':'');
+    const a=Math.random()*Math.PI*2, r=70+Math.random()*110;
+    s.style.cssText=`--x0:${x-6}px;--y0:${y-6}px;--dx:${Math.cos(a)*r}px;--dy:${Math.sin(a)*r-40}px;--rot:${(Math.random()*720-360)|0}deg;background:${COLORS[i%COLORS.length]}`;
+    document.body.appendChild(s); setTimeout(()=>s.remove(),1100); } }
+function confetti(){ if(RM.matches) return; const W=window.innerWidth;
+  for(let i=0;i<30;i++){ const s=document.createElement('div'); s.className='confetti rain '+(i%3===0?'star':i%3===1?'dot':'');
+    s.style.cssText=`--x0:${Math.random()*W}px;--dx:${(Math.random()*80-40)|0}px;--rot:${(Math.random()*900)|0}deg;background:${COLORS[i%COLORS.length]};animation-delay:${(Math.random()*.6).toFixed(2)}s`;
+    document.body.appendChild(s); setTimeout(()=>s.remove(),2800);} }
+function bigStar(){ if(RM.matches) return; const d=document.createElement('div'); d.className='bigstar'; d.innerHTML=STAR(true); document.body.appendChild(d); setTimeout(()=>d.remove(),950); }
+function flames(el){ if(RM.matches||!el) return; const r=el.getBoundingClientRect();
+  for(let i=0;i<10;i++){ const s=document.createElement('div'); s.className='ember';
+    s.style.cssText=`--x0:${r.left+r.width/2-7+(Math.random()*40-20)}px;--y0:${r.top}px;--dx:${(Math.random()*60-30)|0}px;animation-delay:${(i*0.04).toFixed(2)}s`;
+    document.body.appendChild(s); setTimeout(()=>s.remove(),1400);} }
+function flash(kind){ const f=document.createElement('div'); f.className='flash '+kind; document.body.appendChild(f); setTimeout(()=>f.remove(),550); }
+function streakFx(){ const p=$('hudStreakPill'); p.classList.toggle('hot',S.streak>=3); p.classList.toggle('blaze',S.streak>=5); }
+function mapFx(){ const n=S.list.length||1, f=Math.min(1,S.i/n); $('pin').style.left=`calc(14px + (100% - 44px) * ${f})`;
+  const ms=$('miles'); if(ms.dataset.n!=String(n)){ ms.dataset.n=n; ms.innerHTML=''; const k=Math.min(n-1,9); for(let j=1;j<=k;j++){const d=document.createElement('span'); d.className='mile'; d.dataset.f=j/(k+1); d.style.left=`calc(14px + (100% - 44px) * ${j/(k+1)})`; ms.appendChild(d);} }
+  ms.querySelectorAll('.mile').forEach(d=>d.classList.toggle('done',+d.dataset.f<=f)); }
+const SAY={idle:['สู้ ๆ นะ! คิดดี ๆ ก่อนตอบ','ข้อนี้ทำได้แน่นอน!','ค่อย ๆ อ่านโจทย์นะ','เราเป็นกำลังใจให้! 💪','ลุยเลย นักคณิตตัวจิ๋ว!'],
+ good:['เย้! ถูกต้อง!','เก่งสุด ๆ ไปเลย!','ว้าว! ไฟลุกแล้ว!'], bad:['ไม่เป็นไรนะ อ่านเฉลยก่อน','เกือบแล้ว! ข้อหน้าเอาใหม่']};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+function buildMenu(){
+  const g=$('topicGrid'); g.innerHTML='';
+  [...TOPICS, MIXED].forEach(t=>{
+    const b=document.createElement('button'); b.className='topic t-'+t.id+(t.id==='mixed'?' mixed':''); b.dataset.topic=t.id;
+    const best=+(store('mrg_best_'+t.id)||0);
+    const n = t.id==='mixed' ? 'สุ่ม 20 ข้อจากทุกเรื่อง' : `${t.desc} • ${t.qs.length} ข้อ`;
+    const stars=`<span class="best">${best?'⭐'.repeat(best)+'☆'.repeat(3-best):'☆☆☆'}</span>`;
+    b.innerHTML = t.id==='mixed'
+      ? `<span class="ico">${ICONS.mixed}</span><span class="txt">${t.name}<small>${n}</small></span>${stars}`
+      : `<span class="ico">${ICONS[t.id]||''}</span>${t.name}<small>${n}</small>${stars}`;
+    b.onclick=()=>{sfx.tap(); startTopic(t.id);};
+    g.appendChild(b);
+  });
+}
+function prep(q, topicId){ // prepare a playable copy with shuffled choices
+  const c={...q, topicId};
+  if(q.t==='mc'){ const idx=shuffle(q.choices.map((_,i)=>i)); c.choices=idx.map(i=>q.choices[i]); c.a=idx.indexOf(q.a); }
+  return c;
+}
+function startTopic(id, list){
+  S.topic=id; S.mode=list?'retry':'normal'; if(!list) S.lastTopic=id;
+  if(list){ S.list=shuffle(list).map(q=>prep(q.src,q.topicId)); }
+  else if(id==='mixed'){ const all=[]; TOPICS.forEach(t=>t.qs.forEach(q=>all.push({q,tid:t.id}))); S.list=shuffle(all).slice(0,20).map(o=>prep(o.q,o.tid)); }
+  else { const t=TOPICS.find(t=>t.id===id); S.list=shuffle(t.qs).map(q=>prep(q,id)); }
+  S.i=0; S.score=0; S.streak=0; S.best=0; S.wrong=[];
+  const tn = id==='mixed'?MIXED:TOPICS.find(t=>t.id===id);
+  $('hudTopic').textContent=tn.emo+' '+tn.name+(S.mode==='retry'?' (ฝึกซ้ำ)':'');
+  show('game');
+  if(S.timerOn){ S.t0=Date.now(); $('hudTimerWrap').classList.remove('hidden'); clearInterval(S.tick); S.tick=setInterval(()=>{$('hudTimer').textContent=fmtT(Date.now()-S.t0);},500);} else $('hudTimerWrap').classList.add('hidden');
+  render();
+}
+function fmtT(ms){const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function show(id){['menu','game','result'].forEach(s=>$(s).classList.toggle('hidden',s!==id)); window.scrollTo(0,0);}
+function hud(){ $('hudScore').textContent=S.score; $('hudStreak').textContent=S.streak; $('prog').style.width=(S.i/S.list.length*100)+'%'; mapFx(); streakFx(); }
+
+function render(){
+  const q=S.list[S.i]; S.answered=false; S.input='';
+  hud();
+  $('qnum').textContent=`ข้อ ${S.i+1} / ${S.list.length}`;
+  $('qtype').textContent={mc:'🔘 เลือกตอบ',tf:'✅❌ ถูกหรือผิด',num:'🔢 เติมตัวเลข'}[q.t];
+  $('qtext').innerHTML=q.q;
+  $('qfig').innerHTML=q.fig?q.fig():''; $('qfig').classList.toggle('hidden',!q.fig);
+  $('fb').className='fb'; $('fb').innerHTML=''; $('nextBtn').classList.add('hidden');
+  setMood('gameMascot','neutral'); $('say').textContent = S.streak>=3 ? `ไฟลุก! ติดกัน ${S.streak} ข้อแล้ว 🔥` : pick(SAY.idle);
+  const box=$('qinput'); box.innerHTML='';
+  if(q.t==='mc'){
+    const d=document.createElement('div'); d.className='choices';
+    q.choices.forEach((c,k)=>{const b=document.createElement('button'); b.className='choice'; b.dataset.k=k; b.innerHTML=`<span class="lt l${k}">${'ABCD'[k]}</span>`+c; b.onclick=()=>answer(k,b); d.appendChild(b);});
+    box.appendChild(d);
+  } else if(q.t==='tf'){
+    const d=document.createElement('div'); d.className='tfrow';
+    [[true,'⭕ ถูก'],[false,'❌ ผิด']].forEach(([v,l])=>{const b=document.createElement('button'); b.className='choice'; b.dataset.v=v; b.innerHTML=l; b.onclick=()=>answer(v,b); d.appendChild(b);});
+    box.appendChild(d);
+  } else {
+    box.innerHTML=`<div class="ansbox" id="ansbox">&nbsp;</div><div class="pad" id="pad"></div>`;
+    const keys=['7','8','9','⌫','4','5','6',M,'1','2','3','.','0','ok'];
+    keys.forEach(k=>{const b=document.createElement('button'); b.className='key'+(k==='ok'?' ok':k==='⌫'?' del':k===M?' neg':''); b.textContent=k==='ok'?'ตอบ ✔':k; b.dataset.key=k; b.onclick=()=>keyPress(k); $('pad').appendChild(b);});
+  }
+  const card=$('qcard'); card.classList.remove('pop','shake'); void card.offsetWidth; card.classList.add('pop');
+}
+function keyPress(k){
+  if(S.answered) return;
+  if(k==='ok'){ if(S.input===''||S.input===M) return; answer(parseNum(S.input)); return; }
+  sfx.tap();
+  if(k==='⌫') S.input=S.input.slice(0,-1);
+  else if(k===M){ S.input = S.input.startsWith(M)?S.input.slice(1):M+S.input; }
+  else if(k==='.'){ if(!S.input.includes('.')) S.input+=(S.input===''||S.input===M?'0.':'.'); }
+  else if(S.input.replace(M,'').length<12) S.input+=k;
+  $('ansbox').innerHTML=S.input||'&nbsp;';
+}
+function parseNum(s){ return parseFloat(s.replace(M,'-').replace(/,/g,'')); }
+document.addEventListener('keydown',e=>{
+  if($('game').classList.contains('hidden')) return;
+  const q=S.list[S.i]; if(!q) return;
+  if(S.answered && e.key==='Enter'){ next(); return; }
+  if(q.t!=='num') return;
+  if(/^[0-9]$/.test(e.key)) keyPress(e.key);
+  else if(e.key==='-') keyPress(M);
+  else if(e.key==='.') keyPress('.');
+  else if(e.key==='Backspace') keyPress('⌫');
+  else if(e.key==='Enter') keyPress('ok');
+});
+function fmtAns(q){
+  if(q.t==='mc') return q.choices[q.a];
+  if(q.t==='tf') return q.a?'ถูก':'ผิด';
+  const n=q.a; return (n<0?M:'')+Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:6});
+}
+function answer(v, btn){
+  if(S.answered) return; S.answered=true;
+  const q=S.list[S.i]; let ok;
+  if(q.t==='num') ok=Math.abs(v-q.a)<1e-9;
+  else ok=(v===q.a);
+  // visual marks
+  if(q.t==='mc'){ document.querySelectorAll('.choice').forEach(b=>{b.disabled=true; if(+b.dataset.k===q.a) b.classList.add('correct');}); if(!ok&&btn) btn.classList.add('wrong'); }
+  if(q.t==='tf'){ document.querySelectorAll('.choice').forEach(b=>{b.disabled=true; if((b.dataset.v==='true')===q.a) b.classList.add('correct');}); if(!ok&&btn) btn.classList.add('wrong'); }
+  if(q.t==='num'){ $('ansbox').classList.add(ok?'correct':'wrong'); }
+  const fb=$('fb');
+  const src = btn || $('ansbox'); const r = src ? src.getBoundingClientRect() : {left:innerWidth/2,top:innerHeight/2,width:0,height:0};
+  if(ok){ S.score++; S.streak++; S.best=Math.max(S.best,S.streak);
+    const cheers=['เก่งมาก! 🎉','ถูกต้อง! 🌟','สุดยอด! 🚀','เยี่ยมเลย! 💖','ใช่แล้ว! 🥳'];
+    fb.className='fb show good'; fb.innerHTML=`<b>${cheers[Math.floor(Math.random()*cheers.length)]}</b>${S.streak>=3?` 🔥 ตอบถูกติดกัน ${S.streak} ข้อ!`:''}<br>${q.ex}`;
+    setMood('gameMascot','happy'); $('say').textContent = S.streak>=3 ? `ไฟลุก! 🔥 ติดกัน ${S.streak} ข้อ!` : pick(SAY.good);
+    burst(r.left+r.width/2, r.top+r.height/2, 22); bigStar(); flash('good'); sfx.good();
+    if(S.streak>=3){ setTimeout(()=>{flames($('hudStreakPill')); sfx.fire();}, 120); }
+    if(S.streak%5===0) confetti();
+  } else { S.streak=0; S.wrong.push({src:originalOf(q), topicId:q.topicId});
+    fb.className='fb show bad'; fb.innerHTML=`<b>ยังไม่ถูกนะ ลองใหม่รอบหน้า 💪</b><br>คำตอบที่ถูก: <b>${fmtAns(q)}</b><br>${q.ex}`;
+    $('qcard').classList.remove('shake','pop'); void $('qcard').offsetWidth; $('qcard').classList.add('shake');
+    setMood('gameMascot','sad'); $('say').textContent=pick(SAY.bad); flash('bad'); sfx.bad();
+    if(navigator.vibrate && !RM.matches) try{navigator.vibrate(80);}catch(e){}
+  }
+  hud(); $('nextBtn').classList.remove('hidden'); $('nextBtn').textContent = S.i+1<S.list.length?'ข้อต่อไป ➜':'ดูผลคะแนน 🏆';
+  $('nextBtn').scrollIntoView({behavior:RM.matches?'auto':'smooth',block:'nearest'});
+}
+function originalOf(q){ // find the unshuffled original object
+  for(const t of TOPICS) for(const o of t.qs) if(o.q===q.q && o.ex===q.ex) return o;
+  return q;
+}
+function next(){ S.i++; if(S.i<S.list.length) render(); else finish(); }
+function finish(){
+  clearInterval(S.tick); $('prog').style.width='100%';
+  const n=S.list.length, pct=S.score/n, stars = pct>=0.9?3:pct>=0.7?2:pct>=0.4?1:0;
+  $('resStars').innerHTML=[0,1,2].map(i=>STAR(i<stars)).join('');
+  $('resStars').setAttribute('aria-label','⭐'.repeat(stars)+'☆'.repeat(3-stars));
+  $('resBadge').innerHTML=`<span class="badge ${BADGES[stars][0]}">${MEDAL}${BADGES[stars][1]}</span>`;
+  $('resTitle').textContent= stars===3?'สุดยอดไปเลย! 🏆':stars===2?'เก่งมาก! 🎉':stars===1?'ดีแล้ว สู้ต่อนะ! 💪':'ไม่เป็นไร ลองอีกครั้งนะ 🌱';
+  $('resScore').textContent=`ได้ ${S.score} / ${n} คะแนน`;
+  $('resExtra').textContent=`🔥 ตอบถูกติดกันสูงสุด ${S.best} ข้อ`+(S.timerOn?` • ⏱️ ใช้เวลา ${fmtT(Date.now()-S.t0)}`:'');
+  if(S.mode==='normal'){ const k='mrg_best_'+S.topic; if(stars>+(store(k)||0)) store(k,String(stars)); }
+  $('resWrong').innerHTML = S.wrong.length?`<p class="small">ข้อที่ยังผิด ${S.wrong.length} ข้อ — กดปุ่มด้านล่างเพื่อฝึกอีกรอบ</p>`:'<p>ตอบถูกครบทุกข้อเลย! 🌈</p>';
+  $('retryWrongBtn').classList.toggle('hidden', S.wrong.length===0);
+  setMood('resMascot', stars>=1?'happy':'sad');
+  show('result'); if(stars>=2) confetti();
+  if(stars>=1) sfx.win(); else sfx.lose();
+}
+
+$('nextBtn').onclick=()=>{sfx.tap(); next();};
+$('homeBtn').onclick=()=>{sfx.tap(); clearInterval(S.tick); buildMenu(); show('menu');};
+$('menuBtn').onclick=()=>{sfx.tap(); buildMenu(); show('menu');};
+$('againBtn').onclick=()=>{sfx.tap(); startTopic(S.lastTopic);};
+$('retryWrongBtn').onclick=()=>{ sfx.tap(); const w=S.wrong.slice(); startTopic(S.lastTopic, w); };
+
+$('muteBtn').onclick=()=>{ SND.muted=!SND.muted; store('mrg_mute',SND.muted?'1':'0'); syncMute(); if(!SND.muted) sfx.tap(); };
+['menuMascot','gameMascot','resMascot'].forEach(id=>{ $(id).innerHTML=MASCOT; });
+syncMute();
+buildMenu();
+// test hook
+window.__game={TOPICS,S,current:()=>S.list[S.i]};
+</script>
+</body>
+</html>
