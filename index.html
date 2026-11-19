@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7c3aed">
-<title>เกมทบทวนคณิต 🌈</title>
+<title>เกมทบทวนคณิต ม.1 / ม.4 🌈</title>
 <style>
 :root{--pink:#ff5fa2;--purple:#7c3aed;--blue:#22b8f0;--green:#22c55e;--yellow:#ffd23f;--orange:#ff8a1f;--red:#ff4d6d;--ink:#2e1f4f;--card:#fff;
  --r:24px;--shadow:0 10px 0 rgba(46,31,79,.18),0 18px 30px rgba(46,31,79,.18)}
@@ -215,6 +215,36 @@ sup{font-size:.7em}
  .sym,.bg::before{animation:none!important}
  .confetti,.ember,.bigstar{display:none!important}
 }
+/* ---------- grade select + ม.4 theme ---------- */
+.grade-tag{display:inline-block;background:#ffe66d;color:#2e1f4f;border-radius:999px;padding:1px 12px;margin-left:4px;font-size:1.05rem;letter-spacing:0;-webkit-text-stroke:0;text-shadow:none;box-shadow:0 3px 0 #c99400;vertical-align:middle}
+body[data-grade="m4"] .grade-tag{background:#5eead4;box-shadow:0 3px 0 #0f766e}
+.hero h1{font-size:1.5rem}
+#grades .hero{padding-top:8px}
+.grade-grid{display:flex;flex-direction:column;gap:16px}
+.gcard{--c1:#ff3d8b;--c2:#c084fc;--sh:#9d174d;position:relative;overflow:hidden;border:3px solid #fff;border-radius:28px;padding:16px 16px 14px;font-size:1.2rem;font-weight:800;color:#fff;cursor:pointer;
+ background:linear-gradient(160deg,var(--c2),var(--c1));box-shadow:0 8px 0 var(--sh),0 14px 18px rgba(46,31,79,.25);
+ text-align:left;display:flex;align-items:center;gap:14px;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.gcard::after{content:"";position:absolute;left:10%;right:10%;top:6px;height:36%;border-radius:20px;background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,0));pointer-events:none}
+.gcard:active{transform:translateY(6px);box-shadow:0 2px 0 var(--sh),0 4px 8px rgba(46,31,79,.2)}
+.gcard .mark{width:74px;height:74px;flex:0 0 74px;border-radius:22px;background:rgba(255,255,255,.95);color:#2e1f4f;display:grid;place-items:center;font-size:1.55rem;font-weight:900;box-shadow:inset 0 -4px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.15);text-shadow:none}
+.gcard .txt{display:flex;flex-direction:column;gap:2px;z-index:1}
+.gcard .txt b{font-size:1.35rem}
+.gcard .txt small{font-weight:600;opacity:.97;font-size:.82rem;line-height:1.4;text-shadow:none}
+.gcard.g-m1{--c1:#ff3d8b;--c2:#c084fc;--sh:#9d174d}
+.gcard.g-m4{--c1:#0d9488;--c2:#38bdf8;--sh:#0f766e}
+.back-grade{background:#fff;border:3px solid #fff;border-radius:999px;padding:9px 18px;font-weight:800;cursor:pointer;box-shadow:0 5px 0 #c4b5fd}
+.back-grade:active{transform:translateY(3px);box-shadow:0 2px 0 #c4b5fd}
+body[data-grade="m4"] .back-grade{box-shadow:0 5px 0 #5eead4}
+.t-count{--c1:#0d9488;--c2:#5eead4;--sh:#0f766e}
+.t-prob{--c1:#4f46e5;--c2:#818cf8;--sh:#312e81}
+body[data-grade="m4"]{background:#0e7490}
+body[data-grade="m4"] .bg{background:#0e7490}
+body[data-grade="m4"] .bg::before{
+ background:conic-gradient(from 0deg at 50% 50%,#2dd4bf,#67e8f9,#818cf8,#fbbf24,#34d399,#22d3ee,#2dd4bf)}
+body[data-grade="m4"] .title{text-shadow:0 3px 0 #0f766e,0 6px 0 rgba(15,23,42,.25);-webkit-text-stroke:1px rgba(15,118,110,.45)}
+body[data-grade="m4"] .title .g{color:#fde68a}
+body[data-grade="m4"] .mute{background:#5eead4;box-shadow:0 4px 0 #0f766e,0 6px 12px rgba(0,0,0,.2)}
+
 </style>
 </head>
 <body>
@@ -238,15 +268,36 @@ sup{font-size:.7em}
 </button>
 <div class="wrap">
 
+
+<!-- GRADES -->
+<section id="grades">
+  <div class="hero">
+    <svg class="mascot happy" id="gradeMascot" viewBox="0 0 120 120"></svg>
+    <h1 class="title">เกมทบทวน<span class="g">คณิต</span></h1>
+  </div>
+  <p class="sub">เลือกชั้นเรียนก่อน แล้วค่อยเลือกเรื่องที่จะทบทวน ⭐</p>
+  <div class="grade-grid">
+    <button class="gcard g-m1" data-grade="m1" type="button">
+      <span class="mark">ม.1</span>
+      <span class="txt"><b>คณิต ม.1</b><small>กราฟ • การสร้างเรขาคณิต • จำนวนเต็ม<br>สถิติ • เลขยกกำลัง</small></span>
+    </button>
+    <button class="gcard g-m4" data-grade="m4" type="button">
+      <span class="mark">ม.4</span>
+      <span class="txt"><b>คณิต ม.4</b><small>หลักการนับเบื้องต้น • ความน่าจะเป็น</small></span>
+    </button>
+  </div>
+</section>
+
 <!-- MENU -->
-<section id="menu">
+<section id="menu" class="hidden">
   <div class="hero">
     <svg class="mascot happy" id="menuMascot" viewBox="0 0 120 120"></svg>
-    <h1 class="title">เกมทบทวน<span class="g">คณิต</span></h1>
+    <h1 class="title" id="menuTitle">เกมทบทวน<span class="g">คณิต</span> <span class="grade-tag" id="gradeTag">ม.1</span></h1>
   </div>
   <p class="sub">เลือกเรื่องที่อยากทบทวน แล้วไปเก็บดาวกันเลย! ⭐</p>
   <div class="grid" id="topicGrid"></div>
   <div class="opts">
+    <button class="back-grade" id="gradeBtn" type="button">↩ เลือกชั้นเรียน</button>
   </div>
 </section>
 
@@ -397,6 +448,44 @@ function tableFig(rows){
   return h+'</table>';
 }
 
+
+function grid3(){
+  const s=30,m=18,n=3,w=m*2+s*n;
+  let g='';
+  for(let i=0;i<=n;i++){
+    g+=`<line x1="${m}" y1="${m+i*s}" x2="${m+n*s}" y2="${m+i*s}" stroke="#2e1f4f" stroke-width="2.6" stroke-linecap="square"/>`;
+    g+=`<line x1="${m+i*s}" y1="${m}" x2="${m+i*s}" y2="${m+n*s}" stroke="#2e1f4f" stroke-width="2.6" stroke-linecap="square"/>`;
+  }
+  return svgWrap(w,w,g);
+}
+function triMid(){
+  const A=[110,10],B=[16,142],C=[204,142];
+  const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2];
+  const D=mid(A,B),E=mid(B,C),F=mid(A,C);
+  const pt=p=>p.join(',');
+  return svgWrap(220,160,`<polygon points="${pt(A)} ${pt(B)} ${pt(C)}" fill="#efe5ff" stroke="#2e1f4f" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="${pt(D)} ${pt(E)} ${pt(F)}" fill="#ffd6ea" stroke="#2e1f4f" stroke-width="3" stroke-linejoin="round"/>`);
+}
+function tree23(){
+  const n1=[70,70],n2=[70,130];
+  const leaves1=[[150,40],[150,70],[150,100]], leaves2=[[150,120],[150,150],[150,180]];
+  let g=`<circle cx="24" cy="100" r="8" fill="#22b8f0" stroke="#2e1f4f" stroke-width="2.5"/>
+    <text x="24" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#2e1f4f">กทม.</text>
+    <line x1="24" y1="100" x2="${n1[0]}" y2="${n1[1]}" stroke="#2e1f4f" stroke-width="2.4"/>
+    <line x1="24" y1="100" x2="${n2[0]}" y2="${n2[1]}" stroke="#2e1f4f" stroke-width="2.4"/>
+    <circle cx="${n1[0]}" cy="${n1[1]}" r="7" fill="#ffd23f" stroke="#2e1f4f" stroke-width="2.4"/>
+    <circle cx="${n2[0]}" cy="${n2[1]}" r="7" fill="#ffd23f" stroke="#2e1f4f" stroke-width="2.4"/>
+    <text x="${n1[0]-18}" y="${n1[1]-12}" font-size="12" font-weight="700" fill="#2e1f4f">น.1</text>
+    <text x="${n2[0]-18}" y="${n2[1]-12}" font-size="12" font-weight="700" fill="#2e1f4f">น.2</text>`;
+  [...leaves1,...leaves2].forEach((p,i)=>{
+    const src=i<3?n1:n2;
+    g+=`<line x1="${src[0]}" y1="${src[1]}" x2="${p[0]}" y2="${p[1]}" stroke="#2e1f4f" stroke-width="2.2"/>
+        <circle cx="${p[0]}" cy="${p[1]}" r="6" fill="#22c55e" stroke="#2e1f4f" stroke-width="2.2"/>
+        <text x="${p[0]+14}" y="${p[1]+4}" font-size="12" font-weight="700" fill="#2e1f4f">ช.${(i%3)+1}</text>`;
+  });
+  return svgWrap(200,200,g);
+}
+
 /* ---------- question bank (based only on the 5 summary sheets) ----------
  t: 'mc' (choices, a=index of correct in given list), 'tf' (a=true/false), 'num' (a=number) */
 const TOPICS = [
@@ -527,6 +616,67 @@ const TOPICS = [
 ]},
 ];
 
+
+const M1_TOPICS = TOPICS;
+const M4_TOPICS = [
+{ id:'count', name:'หลักการนับเบื้องต้น', short:'หลักการนับ', emo:'🧮', color:'linear-gradient(135deg,#2dd4bf,#38bdf8)', desc:'หลักการบวก • หลักการคูณ • แฟกทอเรียล • การเรียงสับเปลี่ยน', qs:[
+ {t:'tf', q:'หลักการบวกใช้ได้เมื่อแยกงานเป็นกรณีที่<b>ไม่ซ้ำกัน</b> และแต่ละกรณีทำงานได้เสร็จสมบูรณ์', a:true, ex:'ถูกต้อง! ชีทเรียกหลักการนี้ว่า หลักการบวก (addition principle) ใช้เมื่อกรณีไม่ทับกัน'},
+ {t:'num', q:'ต้องเดินทางจากกรุงเทพฯ ไปเชียงใหม่ โดยเลือกนั่งเครื่องบินหรือรถประจำทาง<br>มีสายการบิน 6 สาย และบริษัทรถประจำทาง 5 บริษัท (เลือกได้อย่างใดอย่างหนึ่ง)<br>เดินทางได้ทั้งหมดกี่วิธี?', a:11, ex:'แยกเป็น 2 กรณีที่ไม่ซ้ำกัน: เครื่องบิน 6 วิธี + รถประจำทาง 5 วิธี = 11 วิธี (หลักการบวก)'},
+ {t:'mc', q:'ถ้าทำงานหนึ่งแบ่งได้เป็น k กรณีที่ไม่ซ้ำกัน โดยกรณีที่ i ทำได้ nᵢ วิธี จำนวนวิธีทั้งหมดคือข้อใด?', choices:['n₁ + n₂ + … + nₖ','n₁ × n₂ × … × nₖ','n₁ − n₂ − … − nₖ','k × n₁'], a:0, ex:'นิยามของหลักการบวก: รวมจำนวนวิธีของทุกกรณีที่แยกกันและไม่ทับกัน'},
+ {t:'num', q:'ครูต้องเดินทางจากกรุงเทพฯ ไปภูเก็ต มีวิธีเดินทาง 2 แบบ คือเครื่องบิน (3 สาย) และรถประจำทาง (2 บริษัท)<br>ครูเลือกได้อย่างใดอย่างหนึ่ง จะเดินทางได้กี่วิธี?', a:5, ex:'กรณีเครื่องบิน 3 วิธี + กรณีรถประจำทาง 2 วิธี = 5 วิธี'},
+ {t:'num', q:'จากรูป จะมีรูปสามเหลี่ยมทั้งหมดกี่รูป?', fig:()=>triMid(), a:5, ex:'กรณีที่ 1: สามเหลี่ยมด้านยาว 1 หน่วย มี 4 รูป (สามรูปชี้ขึ้น หนึ่งรูปชี้ลงตรงกลาง) • กรณีที่ 2: สามเหลี่ยมด้านยาว 2 หน่วย มี 1 รูป (รูปใหญ่) • รวม 4 + 1 = 5 รูป'},
+ {t:'num', q:'จากตาราง 3 × 3 ช่อง หาจำนวน<b>สี่เหลี่ยมจัตุรัส</b>ทั้งหมดได้กี่รูป?', fig:()=>grid3(), a:14, ex:'แยกตามความยาวด้าน: ด้าน 1 หน่วย = 9 รูป, ด้าน 2 หน่วย = 4 รูป, ด้าน 3 หน่วย = 1 รูป • รวม 9 + 4 + 1 = 14 รูป'},
+ {t:'mc', q:'จากตาราง 3 × 3 ช่อง จำนวน<b>สี่เหลี่ยมทั้งหมด</b> (รวมจัตุรัสและสี่เหลี่ยมผืนผ้า) เท่ากับข้อใด?', fig:()=>grid3(), choices:['14','22','36','9'], a:2, ex:'สี่เหลี่ยมจัตุรัสมี 14 รูป ส่วนสี่เหลี่ยมผืนผ้าที่ไม่ใช่จัตุรัสมี 22 รูป (นับในชีทหน้าหนึ่ง) รวมทั้งหมด 14 + 22 = 36 รูป หรือคิดจากเลือกเส้นนอน 2 เส้นจาก 4 เส้นและเส้นตั้ง 2 เส้นจาก 4 เส้น: C(4,2) × C(4,2) = 6 × 6 = 36'},
+ {t:'mc', q:'ข้อใดเป็นเงื่อนไขของการใช้<b>หลักการคูณ</b>?', choices:['งานแบ่งเป็นหลายขั้นตอน ต้องทำครบทุกขั้นจึงจะเสร็จ','งานแยกเป็นกรณีที่ไม่ทับกัน เลือกได้อย่างใดอย่างหนึ่ง','นับเฉพาะกรณีที่ซ้ำกันได้','ใช้ได้เฉพาะเมื่อมี 2 กรณีเท่านั้น'], a:0, ex:'หลักการคูณ (multiplication principle) ใช้เมื่อแบ่งงานเป็นขั้นตอนต่อเนื่อง ทำเพียงขั้นเดียวยังไม่เสร็จ ต้องทำครบทุกขั้น'},
+ {t:'num', q:'เดินทางจากกรุงเทพฯ ไปนคร (2 เส้นทาง) แล้วนครต่อไปยังชุมชน (3 เส้นทาง) ดังแผนภาพ<br>มีเส้นทางทั้งหมดกี่เส้น?', fig:()=>tree23(), a:6, ex:'ต้องไปให้ครบ 2 ช่วงทาง: ช่วงแรก 2 ทาง × ช่วงหลัง 3 ทาง = 6 เส้นทาง (หลักการคูณ) จะนับจากแผนภาพต้นไม้ก็ได้ 6 ปลายทาง'},
+ {t:'num', q:'มีอาหารคาว 4 อย่าง และขนม 3 อย่าง ต้องเลือกมาอย่างละ 1 อย่าง จะเลือกได้กี่วิธี?', a:12, ex:'ขั้นที่ 1 เลือกคาวได้ 4 วิธี ขั้นที่ 2 เลือกขนมได้ 3 วิธี • 4 × 3 = 12 วิธี'},
+ {t:'num', q:'ร้านขายเสื้อ 6 แบบ กางเกง 3 แบบ และเนคไท 5 แบบ<br>ชายคนหนึ่งจะแต่งตัวโดยเลือกเสื้อ กางเกง และเนคไทอย่างละ 1 ชิ้น ได้กี่แบบ?', a:90, ex:'6 × 3 × 5 = 90 แบบ'},
+ {t:'num', q:'นักเรียน 3 คน เข้า–ออกห้องประชุมที่มีประตู 3 บาน โดย<br>• คนที่ 1 เข้าและออกประตูบานเดียวกัน<br>• คนที่ 2 เข้าและออกคนละบาน<br>• คนที่ 3 เข้า–ออกประตูบานใดก็ได้<br>ทั้ง 3 คนเข้าและออกห้องนี้ได้ทั้งหมดกี่วิธี?', a:162, ex:'คนที่ 1 เลือกประตูได้ 3 วิธี (เข้าออกบานเดียวกัน) • คนที่ 2 เข้าได้ 3 บาน ออกได้อีก 2 บาน = 6 วิธี • คนที่ 3 เข้า 3 บาน ออก 3 บาน = 9 วิธี • รวม 3 × 6 × 9 = 162 วิธี'},
+ {t:'num', q:'ครูเดินทางจากกรุงเทพฯ ไปเชียงใหม่ แต่เส้นทางต้องผ่านนครสวรรค์<br>ช่วงกรุงเทพฯ → นครสวรรค์ มี 2 เส้นทาง และช่วงนครสวรรค์ → เชียงใหม่ มี 3 เส้นทาง<br>เดินทางได้กี่วิธี?', a:6, ex:'ต้องไปครบสองช่วงต่อเนื่อง: 2 × 3 = 6 วิธี'},
+ {t:'num', q:'จงสร้างจำนวนที่มี 3 หลัก จากเลข 2, 3, 5, 7, 8, 9 โดยใช้เลขไม่ซ้ำกัน จะสร้างได้กี่จำนวน?', a:120, ex:'หลักร้อยเลือกได้ 6 ตัว หลักสิบเหลือ 5 ตัว หลักหน่วยเหลือ 4 ตัว • 6 × 5 × 4 = 120 จำนวน (หรือ P(6,3) = 6!/(3!) = 120)'},
+ {t:'num', q:'5! เท่ากับเท่าไร?', a:120, ex:'5! = 5 × 4 × 3 × 2 × 1 = 120'},
+ {t:'tf', q:'0! = 1', a:true, ex:'ถูกต้อง! กำหนดให้ 0! = 1 เพื่อให้สูตร n! = n(n−1)! ใช้ได้เมื่อ n = 1 เช่นกัน เพราะ 1! = 1 × 0!'},
+ {t:'mc', q:'ค่าของ (4! × 6!) / 8! เท่ากับข้อใด?', choices:[fr(3,7),fr(3,8),fr(1,2),'24'], a:0, ex:'(4! × 6!) / 8! = (4 × 3 × 2 × 1 × 6!) / (8 × 7 × 6!) = 24 / 56 = 3/7'},
+ {t:'num', q:'7! / 5! เท่ากับเท่าไร?', a:42, ex:'7! / 5! = (7 × 6 × 5!) / 5! = 7 × 6 = 42'},
+ {t:'mc', q:'6! / (5! 7!) เท่ากับข้อใด?', choices:[fr(1,840),fr(1,42),fr(6,7),fr(1,7)], a:0, ex:'6! / (5! 7!) = (6 × 5!) / (5! × 7 × 6 × 5 × 4 × 3 × 2 × 1) = 1 / (7 × 6 × 5 × 4 × 3 × 2 × 1) แต่หลังหัก 6 ออกจะเหลือ 1 / 840'},
+ {t:'mc', q:'(3! + 5!) / (3! − 5!) เท่ากับข้อใด?', choices:[`${M}21/19`,'21/19',`${M}19/21`,'19/21'], a:0, ex:'3! = 6 และ 5! = 120 ได้ (6+120)/(6−120) = 126 / (−114) = −21/19 (ในชีทคำนวณจนถึง 21/19 แต่ลืมเครื่องหมายลบ เพราะตัวส่วน 1 − 20 เป็นลบ)'},
+ {t:'num', q:'จงหาค่าของ (n+1)! / (n−2)! เมื่อ n = 5', a:120, ex:'แทน n = 5 ได้ (5+1)! / (5−2)! = 6! / 3! = (6 × 5 × 4 × 3!) / 3! = 6 × 5 × 4 = 120'},
+ {t:'num', q:'ร้านค้าต้องนำกระเป๋ารุ่นใหม่ที่แตกต่างกัน 6 ใบ มาวางเรียงกันเป็นเส้นตรงหน้าร้าน<br>จัดกระเป๋าได้ทั้งหมดกี่วิธี?', a:720, ex:'ตำแหน่งที่ 1 เลือกได้ 6 ใบ ตำแหน่งที่ 2 เหลือ 5 ใบ … จนถึงใบสุดท้าย 1 ใบ • 6! = 6 × 5 × 4 × 3 × 2 × 1 = 720 วิธี นี่คือการเรียงสับเปลี่ยนเชิงเส้นของสิ่งของที่แตกต่างกันทั้งหมด'},
+ {t:'num', q:'นำรูปภาพที่แตกต่างกัน 5 รูป มาจัดแสดงเรียงต่อกันในแนวเส้นตรง<br>จัดแสดงได้ทั้งหมดกี่วิธี?', a:120, ex:'5! = 5 × 4 × 3 × 2 × 1 = 120 วิธี'},
+ {t:'mc', q:'สิ่งของ A, B, C ที่แตกต่างกัน นำมาเรียงในแนวเส้นตรงได้กี่วิธี?', choices:['6','3','9','8'], a:0, ex:'วิธีเรียงคือ ABC, ACB, BAC, BCA, CAB, CBA รวม 3! = 6 วิธี'},
+ {t:'num', q:'8! / 4! เท่ากับเท่าไร?', a:1680, ex:'8! / 4! = 8 × 7 × 6 × 5 = 1680'},
+]},
+{ id:'prob', name:'ความน่าจะเป็น', emo:'🎲', color:'linear-gradient(135deg,#818cf8,#6366f1)', desc:'ปริภูมิตัวอย่าง • เหตุการณ์ • การเรียงสับเปลี่ยน • การจัดหมู่', qs:[
+ {t:'mc', q:'ทอดลูกเต๋าธรรมดา 1 ลูก หนึ่งครั้ง ปริภูมิตัวอย่าง (sample space) S คือข้อใด?', choices:['S = {1, 2, 3, 4, 5, 6}','S = {1, 2, 3}','S = {2, 4, 6}','S = {1, 6}'], a:0, ex:'ผลที่อาจออกได้มี 6 หน้า คือ 1 ถึง 6 เซตของผลลัพธ์ทั้งหมดเรียกว่าปริภูมิตัวอย่าง เขียน S = {1, 2, 3, 4, 5, 6}'},
+ {t:'num', q:'ทอดลูกเต๋า 1 ลูก หนึ่งครั้ง จำนวนสมาชิกของปริภูมิตัวอย่าง n(S) เท่ากับเท่าไร?', a:6, ex:'ผลที่เป็นไปได้มี 6 แบบ จึงได้ n(S) = 6'},
+ {t:'tf', q:'เหตุการณ์ คือ สับเซตของปริภูมิตัวอย่าง', a:true, ex:'ถูกต้อง! ในชีทสรุปว่าเหตุการณ์เป็นสับเซตของปริภูมิตัวอย่าง และสัญลักษณ์ ∈ หมายถึงเป็นสมาชิก'},
+ {t:'mc', q:'สัญลักษณ์ ∈ หมายถึงอะไร?', choices:['เป็นสมาชิก','ไม่เป็นสมาชิก','สับเซต','ปริภูมิตัวอย่าง'], a:0, ex:'∈ อ่านว่า “เป็นสมาชิกของ” เช่น 3 ∈ S หมายความว่า 3 เป็นสมาชิกของปริภูมิตัวอย่าง S'},
+ {t:'mc', q:'ในถุงมีลูกบอล 10 ลูก เป็นสีแดง 4 ลูก สีขาว 3 ลูก สีดำ 3 ลูก สุ่มหยิบ 1 ลูก<br>สีใดมีโอกาสหยิบได้มากที่สุด?', choices:['สีแดง','สีขาว','สีดำ','โอกาสเท่ากันทุกสี'], a:0, ex:'แดงมี 4 ลูก มากกว่าขาวและดำที่มีอย่างละ 3 ลูก ดังนั้นสีแดงมีโอกาสถูกหยิบมากที่สุด'},
+ {t:'mc', q:'จากถุงลูกบอล 10 ลูก (แดง 4, ขาว 3, ดำ 3) สุ่มหยิบ 1 ลูก โอกาสที่จะได้ลูกสีดำเท่ากับข้อใด?', choices:[fr(3,10),fr(4,10),fr(1,3),fr(3,7)], a:0, ex:'ปริภูมิตัวอย่างมี 10 ลูก เหตุการณ์ได้สีดำมี 3 ลูก • ความน่าจะเป็น = 3/10'},
+ {t:'mc', q:'จากถุงเดียวกัน โอกาสที่จะได้ลูกที่<b>ไม่ใช่สีแดง</b>เท่ากับข้อใด?', choices:[fr(3,5),fr(4,10),fr(3,10),fr(1,2)], a:0, ex:'ไม่ใช่แดง = ขาว 3 + ดำ 3 = 6 ลูก จาก 10 ลูก = 6/10 = 3/5'},
+ {t:'mc', q:'ทอดลูกเต๋า 1 ลูก โอกาสที่จะออกเลขคู่เท่ากับข้อใด?', choices:[fr(1,2),fr(1,3),fr(1,6),fr(2,3)], a:0, ex:'เลขคู่คือ 2, 4, 6 มี 3 ผลจาก 6 ผล • 3/6 = 1/2'},
+ {t:'mc', q:'ทอดลูกเต๋า 1 ลูก โอกาสที่จะออกเลขมากกว่า 4 เท่ากับข้อใด?', choices:[fr(1,3),fr(1,2),fr(2,3),fr(1,6)], a:0, ex:'เลขมากกว่า 4 คือ 5 และ 6 มี 2 ผลจาก 6 ผล • 2/6 = 1/3'},
+ {t:'mc', q:'P<sub>n,r</sub> คืออะไร?', choices:['การเรียงสับเปลี่ยน (สนใจลำดับ)','การจัดหมู่ (ไม่สนใจลำดับ)','ปริภูมิตัวอย่าง','ความน่าจะเป็น'], a:0, ex:'P<sub>n,r</sub> คือการเลือกแบบสนใจลำดับ หรือการเรียงสับเปลี่ยนของ r สิ่งจากของที่ต่างกันทั้งหมด n สิ่ง'},
+ {t:'mc', q:'C<sub>n,r</sub> หรือ (n เลือก r) คืออะไร?', choices:['การจัดหมู่ (ไม่สนใจลำดับ)','การเรียงสับเปลี่ยน (สนใจลำดับ)','แฟกทอเรียลของ n','หลักการบวก'], a:0, ex:'C<sub>n,r</sub> คือการจัดหมู่ ไม่สนใจลำดับ อยู่ตำแหน่งใดก็ได้'},
+ {t:'mc', q:'สูตรของ P<sub>n,r</sub> คือข้อใด?', choices:['n! / (n−r)!','n! / (r! (n−r)!)','n! / r!','(n−r)! / n!'], a:0, ex:'P<sub>n,r</sub> = n! / (n−r)! โดย n = จำนวนชิ้นทั้งหมด และ r = จำนวนชิ้นที่เลือกออกมา'},
+ {t:'mc', q:'สูตรของ C<sub>n,r</sub> คือข้อใด?', choices:['n! / (r! (n−r)!)','n! / (n−r)!','n! / r!','r! / n!'], a:0, ex:'C<sub>n,r</sub> = n! / (r! (n−r)!) มี r! ที่ตัวส่วนเพิ่มจากสูตร P เพราะไม่สนใจลำดับ'},
+ {t:'num', q:'จะเลือกไปดูภาพยนตร์ 2 วัน จากวันจันทร์ อังคาร และพุธ (ไม่สนใจว่าวันใดไปก่อน)<br>เลือกได้กี่วิธี?', a:3, ex:'เป็นการจัดหมู่ C(3,2) = 3! / (2! 1!) = 3 วิธี คือ จ–อ, จ–พ และ อ–พ'},
+ {t:'num', q:'จากวันจันทร์ อังคาร พุธ เลือกไป 2 วัน โดยวันหนึ่งไปดูภาพยนตร์ วันหนึ่งไปงานคาวบอย (สนใจลำดับ)<br>จัดได้กี่วิธี?', a:6, ex:'เป็นการเรียงสับเปลี่ยน P(3,2) = 3! / (3−2)! = 3! / 1! = 3 × 2 = 6 วิธี'},
+ {t:'num', q:'จงหาจำนวนวิธีเลือกตัวแทนนักเรียน 5 คน จากนักเรียนกลุ่มหนึ่งซึ่งมี 8 คน', a:56, ex:'ไม่สนใจลำดับ จึงใช้การจัดหมู่ C(8,5) = 8! / (5! 3!) = (8 × 7 × 6) / (3 × 2 × 1) = 56 วิธี'},
+ {t:'mc', q:'ต้องเลือกกรรมการนักเรียน 9 คน ประกอบด้วยชาย 5 คน และหญิง 4 คน<br>จากนักเรียนชาย 20 คน และนักเรียนหญิง 15 คน เลือกได้กี่วิธี?', choices:['21,162,960','15,504','1,365','56'], a:0, ex:'เลือกชาย C(20,5) และหญิง C(15,4) แล้วคูณกัน (หลักการคูณ) • C(15,4) × C(20,5) = 1,365 × 15,504 = 21,162,960 วิธี'},
+ {t:'num', q:'ข้อสอบอัตนัยชุดหนึ่งมี 6 ข้อ ถ้าระบุให้เลือกทำเพียง 4 ข้อ จะเลือกข้อสอบได้กี่วิธี?', a:15, ex:'C(6,4) = 6! / (4! 2!) = (6 × 5) / 2 = 15 วิธี'},
+ {t:'num', q:'ต้องเลือกกระโปรง 3 ตัว โดยกระโปรงยาวมี 5 ตัว ต้องเลือก 2 ตัว และกระโปรงสั้นมี 3 ตัว ต้องเลือก 1 ตัว<br>เลือกกระโปรงได้กี่วิธี?', a:30, ex:'C(5,2) × C(3,1) = 10 × 3 = 30 วิธี'},
+ {t:'num', q:'มีเพื่อน A, B, C, D ชวน 3 คนไปต่างจังหวัด (ไม่กำหนดหน้าที่ ไม่สนใจลำดับ)<br>เลือกเพื่อนไปได้กี่วิธี?', a:4, ex:'C(4,3) = 4 วิธี (เทียบได้กับเหลือเพื่อนไว้ 1 คน มี 4 แบบ)'},
+ {t:'num', q:'มีเพื่อน A, B, C, D ชวน 3 คนไปต่างจังหวัด โดยคนแรกขับรถ คนที่ 2 บอกทาง คนที่ 3 ถ่ายรูป<br>เลือกและกำหนดหน้าที่ได้กี่วิธี?', a:24, ex:'สนใจลำดับ/หน้าที่ จึงใช้ P(4,3) = 4 × 3 × 2 = 24 วิธี'},
+ {t:'num', q:'วางผลไม้ที่แตกต่างกัน 5 ชนิด เรียงกันในแนวเส้นตรง จะจัดได้กี่วิธี?', a:120, ex:'เรียงของต่างกันทั้งหมด 5 ชิ้น = 5! = 5 × 4 × 3 × 2 × 1 = 120 วิธี'},
+ {t:'num', q:'มีผลไม้ที่แตกต่างกัน 5 ชนิด ต้องการหยิบมา 3 ผล แล้ววางเรียงในแนวเส้นตรง จะจัดได้ทั้งหมดกี่แบบ?', a:60, ex:'P(5,3) = 5! / (5−3)! = 5! / 2! = 5 × 4 × 3 = 60 แบบ'},
+ {t:'num', q:'P<sub>8,4</sub> เท่ากับเท่าไร?', a:1680, ex:'P(8,4) = 8! / (8−4)! = 8! / 4! = 8 × 7 × 6 × 5 = 1,680 (ในชีทมีความผิดพลาดที่คูณลืมตัวคูณ 7 แล้วได้ 240 ซึ่งไม่ถูกต้อง)'},
+ {t:'mc', q:'ข้อใดใช้ P<sub>n,r</sub> มากกว่า C<sub>n,r</sub>?', choices:['ต้องมีคนแรกอยู่ตรงนี้ คนที่ 2 อยู่ถัดไป (สนใจลำดับ)','เลือกได้เลย อยู่ตำแหน่งใดก็ได้ (ไม่สนใจลำดับ)','นับกรณีที่ไม่ทับกันแล้วบวกกัน','นับจำนวนหน้าของลูกเต๋า'], a:0, ex:'ถ้าโจทย์กำหนดตำแหน่งหรือหน้าที่ เช่น คนแรก คนที่ 2 คนที่ 3 ต้องใช้การเรียงสับเปลี่ยน P ส่วนถ้าแค่เลือกกลุ่มให้ใช้ C'},
+]},
+];
+let GRADE = null;
+let CUR = M1_TOPICS;
+
 /* ---------- state ---------- */
 const $=id=>document.getElementById(id);
 const S={topic:null, list:[], i:0, score:0, streak:0, best:0, wrong:[], answered:false, timerOn:true, t0:0, tick:null, mode:'normal', input:''};
@@ -563,6 +713,8 @@ const ICONS={
  int:`<svg viewBox="0 0 48 48"><path d="M4 30h40" stroke="#2e1f4f" stroke-width="3.5" stroke-linecap="round"/><path d="M4 30l5-4v8zM44 30l-5-4v8z" fill="#2e1f4f"/><path d="M14 26v8M24 26v8M34 26v8" stroke="#2e1f4f" stroke-width="2.5"/><circle cx="14" cy="14" r="8" fill="#0ea5e9"/><path d="M10 14h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="34" cy="14" r="8" fill="#ff3d8b"/><path d="M30 14h8M34 10v8" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`,
  stat:`<svg viewBox="0 0 48 48"><path d="M6 42h36" stroke="#2e1f4f" stroke-width="3.5" stroke-linecap="round"/><rect x="9" y="26" width="7" height="16" rx="2" fill="#22c55e"/><rect x="20" y="16" width="7" height="26" rx="2" fill="#22b8f0"/><rect x="31" y="22" width="7" height="20" rx="2" fill="#ffb020"/><circle cx="36" cy="10" r="7" fill="#ff3d8b"/><path d="M36 10V3a7 7 0 0 1 7 7z" fill="#ffd23f"/></svg>`,
  exp:`<svg viewBox="0 0 48 48"><rect x="4" y="12" width="40" height="30" rx="8" fill="#fff2e0" stroke="#ff7a00" stroke-width="3"/><text x="12" y="36" font-size="22" font-weight="900" fill="#2e1f4f" font-family="sans-serif">a</text><text x="25" y="25" font-size="15" font-weight="900" fill="#ff3d8b" font-family="sans-serif">n</text><path d="M38 4l1.8 4 4 1.8-4 1.8-1.8 4-1.8-4-4-1.8 4-1.8z" fill="#ffd23f" stroke="#e0a800"/></svg>`,
+ count:`<svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="32" rx="6" fill="#ecfeff" stroke="#0f766e" stroke-width="3"/><text x="24" y="30" text-anchor="middle" font-size="16" font-weight="900" fill="#0f766e" font-family="sans-serif">n!</text></svg>`,
+ prob:`<svg viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="6" fill="#fff" stroke="#4f46e5" stroke-width="3"/><circle cx="18" cy="18" r="3.5" fill="#ef4444"/><circle cx="30" cy="18" r="3.5" fill="#0ea5e9"/><circle cx="18" cy="30" r="3.5" fill="#22c55e"/><circle cx="30" cy="30" r="3.5" fill="#f59e0b"/></svg>`,
  mixed:`<svg viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="9" fill="#fff" stroke="#a855f7" stroke-width="3.5" transform="rotate(-8 24 24)"/><g transform="rotate(-8 24 24)"><circle cx="15" cy="15" r="3.5" fill="#ff3d8b"/><circle cx="33" cy="15" r="3.5" fill="#22b8f0"/><circle cx="24" cy="24" r="3.5" fill="#ffb020"/><circle cx="15" cy="33" r="3.5" fill="#22c55e"/><circle cx="33" cy="33" r="3.5" fill="#8b3dff"/></g></svg>`
 };
 const STAR=(on)=>`<svg viewBox="0 0 60 60"><path d="M30 4l7.6 15.6 17.2 2.5-12.4 12.1 2.9 17.1L30 43.2l-15.3 8.1 2.9-17.1L5.2 22.1l17.2-2.5z" fill="${on?'url(#gold)':'#e7e2f3'}" stroke="${on?'#c98a00':'#c9c0dd'}" stroke-width="3.5" stroke-linejoin="round"/>${on?'<path d="M22 20l4-1" stroke="#fff" stroke-width="3" stroke-linecap="round"/>':''}</svg>`;
@@ -613,9 +765,9 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 
 function buildMenu(){
   const g=$('topicGrid'); g.innerHTML='';
-  [...TOPICS, MIXED].forEach(t=>{
+  [...CUR, MIXED].forEach(t=>{
     const b=document.createElement('button'); b.className='topic t-'+t.id+(t.id==='mixed'?' mixed':''); b.dataset.topic=t.id;
-    const best=+(store('mrg_best_'+t.id)||0);
+    const best=+((store('mrg_best_'+(GRADE||'m1')+'_'+t.id))|| (GRADE==='m1' && store('mrg_best_'+t.id)) || 0);
     const n = t.id==='mixed' ? 'สุ่ม 20 ข้อจากทุกเรื่อง' : `${t.desc} • ${t.qs.length} ข้อ`;
     const stars=`<span class="best">${best?'⭐'.repeat(best)+'☆'.repeat(3-best):'☆☆☆'}</span>`;
     b.innerHTML = t.id==='mixed'
@@ -633,17 +785,18 @@ function prep(q, topicId){ // prepare a playable copy with shuffled choices
 function startTopic(id, list){
   S.topic=id; S.mode=list?'retry':'normal'; if(!list) S.lastTopic=id;
   if(list){ S.list=shuffle(list).map(q=>prep(q.src,q.topicId)); }
-  else if(id==='mixed'){ const all=[]; TOPICS.forEach(t=>t.qs.forEach(q=>all.push({q,tid:t.id}))); S.list=shuffle(all).slice(0,20).map(o=>prep(o.q,o.tid)); }
-  else { const t=TOPICS.find(t=>t.id===id); S.list=shuffle(t.qs).map(q=>prep(q,id)); }
+  else if(id==='mixed'){ const all=[]; CUR.forEach(t=>t.qs.forEach(q=>all.push({q,tid:t.id}))); S.list=shuffle(all).slice(0,20).map(o=>prep(o.q,o.tid)); }
+  else { const t=CUR.find(t=>t.id===id); S.list=shuffle(t.qs).map(q=>prep(q,id)); }
   S.i=0; S.score=0; S.streak=0; S.best=0; S.wrong=[];
-  const tn = id==='mixed'?MIXED:TOPICS.find(t=>t.id===id);
-  $('hudTopic').textContent=tn.emo+' '+tn.name+(S.mode==='retry'?' (ฝึกซ้ำ)':'');
+  const tn = id==='mixed'?MIXED:CUR.find(t=>t.id===id);
+  $('hudTopic').textContent=tn.emo+(S.mode==='retry'?' ซ้ำ':'');
+  $('hudTopic').title=tn.name;
   show('game');
   if(S.timerOn){ S.t0=Date.now(); $('hudTimerWrap').classList.remove('hidden'); clearInterval(S.tick); S.tick=setInterval(()=>{$('hudTimer').textContent=fmtT(Date.now()-S.t0);},500);} else $('hudTimerWrap').classList.add('hidden');
   render();
 }
 function fmtT(ms){const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
-function show(id){['menu','game','result'].forEach(s=>$(s).classList.toggle('hidden',s!==id)); window.scrollTo(0,0);}
+function show(id){['grades','menu','game','result'].forEach(s=>$(s).classList.toggle('hidden',s!==id)); window.scrollTo(0,0);}
 function hud(){ $('hudScore').textContent=S.score; $('hudStreak').textContent=S.streak; $('prog').style.width=(S.i/S.list.length*100)+'%'; mapFx(); streakFx(); }
 
 function render(){
@@ -726,7 +879,7 @@ function answer(v, btn){
   $('nextBtn').scrollIntoView({behavior:RM.matches?'auto':'smooth',block:'nearest'});
 }
 function originalOf(q){ // find the unshuffled original object
-  for(const t of TOPICS) for(const o of t.qs) if(o.q===q.q && o.ex===q.ex) return o;
+  for(const t of CUR) for(const o of t.qs) if(o.q===q.q && o.ex===q.ex) return o;
   return q;
 }
 function next(){ S.i++; if(S.i<S.list.length) render(); else finish(); }
@@ -739,7 +892,7 @@ function finish(){
   $('resTitle').textContent= stars===3?'สุดยอดไปเลย! 🏆':stars===2?'เก่งมาก! 🎉':stars===1?'ดีแล้ว สู้ต่อนะ! 💪':'ไม่เป็นไร ลองอีกครั้งนะ 🌱';
   $('resScore').textContent=`ได้ ${S.score} / ${n} คะแนน`;
   $('resExtra').textContent=`🔥 ตอบถูกติดกันสูงสุด ${S.best} ข้อ`+(S.timerOn?` • ⏱️ ใช้เวลา ${fmtT(Date.now()-S.t0)}`:'');
-  if(S.mode==='normal'){ const k='mrg_best_'+S.topic; if(stars>+(store(k)||0)) store(k,String(stars)); }
+  if(S.mode==='normal'){ const k='mrg_best_'+(GRADE||'m1')+'_'+S.topic; if(stars>+(store(k)||0)) store(k,String(stars)); }
   $('resWrong').innerHTML = S.wrong.length?`<p class="small">ข้อที่ยังผิด ${S.wrong.length} ข้อ — กดปุ่มด้านล่างเพื่อฝึกอีกรอบ</p>`:'<p>ตอบถูกครบทุกข้อเลย! 🌈</p>';
   $('retryWrongBtn').classList.toggle('hidden', S.wrong.length===0);
   setMood('resMascot', stars>=1?'happy':'sad');
@@ -754,11 +907,24 @@ $('againBtn').onclick=()=>{sfx.tap(); startTopic(S.lastTopic);};
 $('retryWrongBtn').onclick=()=>{ sfx.tap(); const w=S.wrong.slice(); startTopic(S.lastTopic, w); };
 
 $('muteBtn').onclick=()=>{ SND.muted=!SND.muted; store('mrg_mute',SND.muted?'1':'0'); syncMute(); if(!SND.muted) sfx.tap(); };
-['menuMascot','gameMascot','resMascot'].forEach(id=>{ $(id).innerHTML=MASCOT; });
+function setGrade(g){
+  GRADE=g; CUR = g==='m4' ? M4_TOPICS : M1_TOPICS;
+  document.body.dataset.grade=g;
+  const is4=g==='m4';
+  document.title = is4 ? 'เกมทบทวนคณิต ม.4 🌈' : 'เกมทบทวนคณิต ม.1 🌈';
+  const tc=document.querySelector('meta[name="theme-color"]');
+  if(tc) tc.setAttribute('content', is4 ? '#0d9488' : '#7c3aed');
+  $('gradeTag').textContent = is4 ? 'ม.4' : 'ม.1';
+  $('menuTitle').innerHTML = 'เกมทบทวน<span class="g">คณิต</span> <span class="grade-tag" id="gradeTag">'+(is4?'ม.4':'ม.1')+'</span>';
+  buildMenu(); show('menu');
+}
+document.querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{sfx.tap(); setGrade(b.dataset.grade);});
+$('gradeBtn').onclick=()=>{sfx.tap(); clearInterval(S.tick); document.body.dataset.grade=''; show('grades');};
+['menuMascot','gameMascot','resMascot','gradeMascot'].forEach(id=>{ $(id).innerHTML=MASCOT; });
 syncMute();
-buildMenu();
+show('grades');
 // test hook
-window.__game={TOPICS,S,current:()=>S.list[S.i]};
+window.__game={get TOPICS(){return CUR;}, M1_TOPICS, M4_TOPICS, S, current:()=>S.list[S.i], setGrade};
 </script>
 </body>
 </html>
